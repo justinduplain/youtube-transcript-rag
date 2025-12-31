@@ -1,0 +1,27 @@
+/**
+ * Do not edit directly, this file was auto-generated.
+ */
+
+:root {
+  --cmm-brand-primary: #005ea2;
+  --cmm-color-brand-primary: #005ea2; /** CMM primary brand color, mapped to USWDS Blue 60 */
+  --cmm-color-brand-gold: #c29b40; /** Custom U.S. Courts specific branding */
+  --uswds-color-gray-5: #f0f0f0;
+  --uswds-color-gray-10: #e6e6e6;
+  --uswds-color-gray-30: #adadad;
+  --uswds-color-gray-50: #71767a;
+  --uswds-color-gray-70: #454545;
+  --uswds-color-gray-90: #1b1b1b;
+  --uswds-color-blue-10: #eff6fb;
+  --uswds-color-blue-30: #a9aeb1;
+  --uswds-color-blue-40: #4f97d1;
+  --uswds-color-blue-50: #2e8540;
+  --uswds-color-blue-60: #005ea2;
+  --uswds-color-blue-70: #00487d;
+  --uswds-color-blue-80: #003257;
+  --uswds-color-red-50: #d54309;
+  --uswds-color-red-60: #b50909;
+  --uswds-color-gold-10: #fad980;
+  --uswds-color-gold-20: #f9c642;
+  --uswds-color-green-50: #00a91c;
+}

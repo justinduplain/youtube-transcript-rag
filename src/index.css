@@ -1,0 +1,32 @@
+@charset "UTF-8";
+
+/* 1. Define Layer Priority */
+/* We establish 'base' as the lowest priority. */
+/* Note: We don't list 'utilities' here because we want them Unlayered (Super Priority). */
+@layer base, uswds, cmm;
+
+/* 2. Imports (MUST be the very first rules) */
+@import './styles/generated/tokens.css';
+
+/* Import USWDS into a container layer so it's easily overridden */
+@import "@uswds/uswds/css/uswds.css" layer(uswds);
+
+/* 3. Base Layer (The Reset) */
+/* We wrap 'base' so Tailwind's reset is lower priority than USWDS styles. */
+@layer base {
+  @tailwind base;
+}
+
+/* 4. CMM Overrides Layer */
+@layer cmm {
+  :root {
+    --font-sans: 'Inter', sans-serif; 
+  }
+}
+
+/* 5. Directives (Unlayered) */
+/* We leave these at the root. */
+/* This ensures Tailwind generates the CSS without nesting bugs. */
+/* Unlayered styles automatically beat Layered styles in CSS specificity. */
+@tailwind components;
+@tailwind utilities;
