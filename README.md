@@ -1,73 +1,74 @@
-# React + TypeScript + Vite
+# YouTube Transcript RAG Pipeline
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+This project is a web application designed to facilitate a Retrieval-Augmented Generation (RAG) pipeline for YouTube video transcripts. Users can ingest YouTube video URLs, upon which the application extracts the transcript and generates embeddings for storage in a vector database. This serves as a front-end for a system that can then utilize these embeddings for various RAG-based applications, such as question-answering or content summarization based on YouTube video content.
 
-Currently, two official plugins are available:
+## Features
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+-   **YouTube URL Ingestion:** Easily submit YouTube video URLs.
+-   **Transcript Extraction:** Initiates the process of extracting the transcript from the provided video.
+-   **Embedding Generation:** Generates vector embeddings from the transcript for efficient retrieval.
+-   **User-Friendly Interface:** A simple and intuitive interface built with React.
 
-## React Compiler
+## Tech Stack
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+-   **Frontend:** React, TypeScript
+-   **Build Tool:** Vite
+-   **Styling:** Tailwind CSS, USWDS (United States Web Design System)
+-   **Component Development:** Storybook
 
-## Expanding the ESLint configuration
+## Setup Instructions
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+### Prerequisites
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+-   Node.js (LTS version recommended)
+-   npm (Node Package Manager) or Yarn
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+### Installation
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+1.  Clone the repository:
+    ```bash
+    git clone https://github.com/your-username/youtube-transcript-rag.git
+    cd youtube-transcript-rag
+    ```
+2.  Install the dependencies:
+    ```bash
+    npm install
+    # or
+    yarn install
+    ```
+
+### Running the Development Server
+
+To start the development server with hot-reloading:
+
+```bash
+npm run dev
+# or
+yarn dev
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+Open [http://localhost:5173](http://localhost:5173) (or the port indicated in your console) in your browser to view the application.
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+### Building for Production
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+To build the project for production:
+
+```bash
+npm run build
+# or
+yarn build
 ```
+
+This will compile and optimize your application into the `dist` directory.
+
+### Storybook
+
+To run Storybook and browse the component library:
+
+```bash
+npm run storybook
+# or
+yarn storybook
+```
+
+Open [http://localhost:6006](http://localhost:6006) (or the port indicated in your console) in your browser.
