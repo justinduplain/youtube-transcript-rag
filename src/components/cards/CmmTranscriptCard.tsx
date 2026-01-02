@@ -25,14 +25,14 @@ export const CmmTranscriptCard = ({
         ${className}
       `}
     >
-      <header className="flex items-center justify-between mb-2">
+      <div className="flex items-center justify-between mb-2">
         <span className="font-mono text-sm text-uswds-color-gray-50">
           [{timestamp}]
         </span>
         <span className="font-sans font-semibold text-sm text-uswds-color-gray-90">
           {speaker}
         </span>
-      </header>
+      </div>
       <p className="font-sans text-base text-uswds-color-gray-70 m-0">
         {text}
       </p>
