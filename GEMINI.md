@@ -53,8 +53,8 @@ This project specifically targets the **UI Styling Specialist** competencies:
 * [x] **Typography Tokenization:** Abstract font families (`Inter`, `Merriweather`) and weights into `src/tokens/cmm/typography.json`.
 * [x] **Custom Transcript Card:** Create a high-density data display component (typical of Case Management systems) using the new typography tokens.
 * [ ] **Automated "Zero Trust" Accessibility Pipeline:**
-    * Install `storybook-addon-a11y` to visualize WCAG compliance in real-time.
-    * Install `vitest-axe` and implement a unit test that asserts `expect(container).toHaveNoViolations()` for the `CmmTranscriptCard`.
+    * [x] Install `storybook-addon-a11y` to visualize WCAG compliance in real-time.
+    * [x] Install `vitest-axe` and implement a unit test that asserts `expect(container).toHaveNoViolations()` for the `CmmTranscriptCard`.
 * [ ] **Semantic Token "Aliasing" (DesignOps):** Refactor `src/tokens` to use a 3-tier structure (Base -> Semantic -> Component). Update Style Dictionary to resolve aliases (e.g., `button.primary.bg` -> `color.action.blue` -> `#005ea2`).
 * [ ] **High-Performance Virtualization:** Implement `@tanstack/react-virtual` for the Transcript Viewer to render large datasets without DOM performance degradation. Aim for TTI < 2s.
 

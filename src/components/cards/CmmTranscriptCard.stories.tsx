@@ -53,33 +53,38 @@ export const LongText: Story = {
 };
 
 export const HighDensity: Story = {
-    render: (args) => (
-        <div className="max-w-xl">
-            <h2 className="font-heading-lg mb-2">Transcript Feed</h2>
-            <div className="flex flex-col gap-2">
-                <CmmTranscriptCard 
-                    timestamp="00:05.123"
-                    speaker="Interviewer"
-                    text="Welcome to the show. Can you tell us about your recent work?"
-                />
-                <CmmTranscriptCard 
-                    timestamp="00:08.456"
-                    speaker="Guest"
-                    text="Absolutely. We\'ve been focusing on improving the user experience by leveraging real-time data streams."
-                />
-                <CmmTranscriptCard 
-                    timestamp="00:12.789"
-                    speaker="Interviewer"
-                    text="That sounds fascinating. What kind of challenges did you face?"
-                />
-            </div>
-        </div>
-    ),
-    parameters: {
-        docs: {
-            description: {
-                story: 'A demonstration of multiple transcript cards stacked in a feed, as they might appear in the application. This shows how the cards look in a "high-density" list view.',
-            },
-        },
-    },
+  args: {
+    speaker: ""
+  },
+
+  render: (args) => (
+      <div className="max-w-xl">
+          <h2 className="font-heading-lg mb-2">Transcript Feed</h2>
+          <div className="flex flex-col gap-2">
+              <CmmTranscriptCard 
+                  timestamp="00:05.123"
+                  speaker="Interviewer"
+                  text="Welcome to the show. Can you tell us about your recent work?"
+              />
+              <CmmTranscriptCard 
+                  timestamp="00:08.456"
+                  speaker="Guest"
+                  text="Absolutely. We\'ve been focusing on improving the user experience by leveraging real-time data streams."
+              />
+              <CmmTranscriptCard 
+                  timestamp="00:12.789"
+                  speaker="Interviewer"
+                  text="That sounds fascinating. What kind of challenges did you face?"
+              />
+          </div>
+      </div>
+  ),
+
+  parameters: {
+      docs: {
+          description: {
+              story: 'A demonstration of multiple transcript cards stacked in a feed, as they might appear in the application. This shows how the cards look in a "high-density" list view.',
+          },
+      },
+  }
 }
