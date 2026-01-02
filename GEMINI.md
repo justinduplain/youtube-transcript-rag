@@ -40,6 +40,11 @@ This project specifically targets the **UI Styling Specialist** competencies:
 * **Component Library:**
     * `CmmButton`: A multi-variant wrapper around USWDS Button (Primary/Gold) demonstrating brand-specific overrides implemented via custom CSS rules within the `cmm` layer, leveraging cascade layer precedence.
     * `CmmUrlInput`: A 508-compliant form group for data ingestion.
+    * `CmmTranscriptCard`: A high-density data display component for transcript segments, utilizing typography tokens.
+    * `TestTranscriptCardPage`: A paginated display of `CmmTranscriptCard` components, showcasing URL-driven navigation and accessible pagination controls.
+* **Routing:** Client-side routing implemented with `react-router-dom` for multi-page navigation.
+* **Pagination:** Accessible, URL-driven pagination system integrated for list displays.
+* **Storybook Documentation:** Comprehensive descriptions added to all existing Storybook stories for better context and understanding.
 * **Layer Architecture:** `index.css` successfully implements cascade layers (`base`, `uswds`, `cmm`, `utilities`) to manage specificity, ensuring `cmm` overrides USWDS defaults and unlayered Tailwind utilities maintain their priority without relying on `!important` prefixes.
 
 ## 5. Roadmap & Next Steps
@@ -77,4 +82,5 @@ Cross-Reference Synthesis: Enable the RAG engine to draw connections and contras
 Keep these instrucitons in mind when performing tasks: 
 - New components should always be created with their accompanying story in Storybook
 - Component updates and new patters should also be addressed in Storybook
-- Do not inherintely run any `git` command, `npm start dev`, `npm start storybook`, `npm run build`, or `npm i` actions unless explicitly instructed. Instead ask the user to run these commands and report back the results. 
+- Do not inherintely run any `git` command, `npm start dev`, `npm start storybook`, `npm run build`, or `npm i` actions unless explicitly instructed. Instead ask the user to run these commands and report back the results.
+- Keep GEMINI.md and README.md updated as necessary. 

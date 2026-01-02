@@ -5,6 +5,13 @@ const meta = {
   title: 'Design System/Cards/CmmTranscriptCard',
   component: CmmTranscriptCard,
   tags: ['autodocs'],
+  parameters: {
+    docs: {
+      description: {
+        component: 'A "high-density" card component designed to display a single segment of a transcript. It includes a timestamp, speaker, and the transcript text, styled using the project\'s typography tokens. This component is a building block for displaying transcript feeds in a case management system context.',
+      },
+    },
+  },
   argTypes: {
     timestamp: { control: 'text' },
     speaker: { control: 'text' },
@@ -21,6 +28,13 @@ export const Default: Story = {
     speaker: 'Speaker 1',
     text: 'This is a sample transcript segment. It demonstrates the default appearance of the transcript card component.',
   },
+  parameters: {
+    docs: {
+      description: {
+        story: 'The default view of a single transcript card with a standard length of text.',
+      },
+    },
+  },
 };
 
 export const LongText: Story = {
@@ -28,6 +42,13 @@ export const LongText: Story = {
     timestamp: '02:10.555',
     speaker: 'Speaker 2',
     text: 'This is a much longer transcript segment to demonstrate how the card handles larger amounts of text. The content should wrap naturally within the card\'s boundaries, and the layout should remain consistent and readable even with multiple lines of text flowing in the main content area.',
+  },
+  parameters: {
+    docs: {
+      description: {
+        story: 'A transcript card with a longer text block to demonstrate how content wraps within the component.',
+      },
+    },
   },
 };
 
@@ -54,4 +75,11 @@ export const HighDensity: Story = {
             </div>
         </div>
     ),
+    parameters: {
+        docs: {
+            description: {
+                story: 'A demonstration of multiple transcript cards stacked in a feed, as they might appear in the application. This shows how the cards look in a "high-density" list view.',
+            },
+        },
+    },
 }
