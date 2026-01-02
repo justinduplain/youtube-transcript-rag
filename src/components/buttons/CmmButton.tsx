@@ -17,8 +17,8 @@ export const CmmButton = ({
 
   const variantClasses = 
     variant === 'gold' 
-      ? 'cmm-button--gold text-black' // Style is now handled in index.css
-      : 'bg-cmm-color-brand-primary hover:bg-uswds-color-blue-70';
+      ? 'cmm-button--gold text-black'
+      : 'bg-cmm-button-primary-background-default hover:bg-cmm-button-primary-background-hover text-cmm-button-primary-text';
 
   return (
     <Button

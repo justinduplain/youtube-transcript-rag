@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Routes, Route, Link } from 'react-router-dom';
 import { UrlIngestionForm } from './components/forms/UrlIngestionForm';
 import { TestTranscriptCardPage } from './pages/TestTranscriptCardPage';

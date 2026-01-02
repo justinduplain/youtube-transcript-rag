@@ -3,27 +3,6 @@
  */
 
 :root {
-  --cmm-brand-primary: #005ea2;
-  --cmm-color-brand-primary: #005ea2; /** CMM primary brand color, mapped to USWDS Blue 60 */
-  --cmm-color-brand-gold: #c29b40; /** Custom U.S. Courts specific branding */
-  --uswds-color-gray-5: #f0f0f0;
-  --uswds-color-gray-10: #e6e6e6;
-  --uswds-color-gray-30: #adadad;
-  --uswds-color-gray-50: #71767a;
-  --uswds-color-gray-70: #454545;
-  --uswds-color-gray-90: #1b1b1b;
-  --uswds-color-blue-10: #eff6fb;
-  --uswds-color-blue-30: #a9aeb1;
-  --uswds-color-blue-40: #4f97d1;
-  --uswds-color-blue-50: #2e8540;
-  --uswds-color-blue-60: #005ea2;
-  --uswds-color-blue-70: #00487d;
-  --uswds-color-blue-80: #003257;
-  --uswds-color-red-50: #d54309;
-  --uswds-color-red-60: #b50909;
-  --uswds-color-gold-10: #fad980;
-  --uswds-color-gold-20: #f9c642;
-  --uswds-color-green-50: #00a91c;
   --cmm-font-family-sans: 'Public Sans', system-ui, sans-serif;
   --cmm-font-family-serif: Georgia, serif;
   --cmm-font-family-mono: monospace;
@@ -46,4 +25,34 @@
   --cmm-line-height-30: 1.5;
   --cmm-line-height-40: 1.75;
   --cmm-line-height-50: 2;
+  --uswds-color-white: #ffffff;
+  --uswds-color-black: #000000;
+  --uswds-color-gray-5: #f0f0f0;
+  --uswds-color-gray-10: #e6e6e6;
+  --uswds-color-gray-30: #adadad;
+  --uswds-color-gray-50: #71767a;
+  --uswds-color-gray-70: #454545;
+  --uswds-color-gray-90: #1b1b1b;
+  --uswds-color-blue-10: #eff6fb;
+  --uswds-color-blue-30: #a9aeb1;
+  --uswds-color-blue-40: #4f97d1;
+  --uswds-color-blue-50: #2e8540;
+  --uswds-color-blue-60: #005ea2;
+  --uswds-color-blue-70: #00487d;
+  --uswds-color-blue-80: #003257;
+  --uswds-color-red-50: #d54309;
+  --uswds-color-red-60: #b50909;
+  --uswds-color-gold-10: #fad980;
+  --uswds-color-gold-20: #f9c642;
+  --uswds-color-green-50: #00a91c;
+  --cmm-color-brand-primary: #005ea2; /** CMM primary brand color, mapped to USWDS Blue 60 */
+  --cmm-color-brand-gold: #c29b40; /** Custom U.S. Courts specific branding */
+  --cmm-color-theme-action: #005ea2;
+  --cmm-color-theme-surface: #ffffff;
+  --cmm-color-theme-text-primary: #1b1b1b;
+  --cmm-color-theme-text-secondary: #71767a;
+  --cmm-color-theme-border: #adadad;
+  --cmm-button-primary-background-default: #005ea2;
+  --cmm-button-primary-background-hover: #00487d;
+  --cmm-button-primary-text: #ffffff;
 }

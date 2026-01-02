@@ -15,43 +15,6 @@ declare interface DesignToken {
 }
 
 declare const tokens: {
-  brand: {
-    primary: DesignToken;
-  };
-  color: {
-    brand: {
-      primary: DesignToken;
-      gold: DesignToken;
-    };
-    gray: {
-      "5": DesignToken;
-      "10": DesignToken;
-      "30": DesignToken;
-      "50": DesignToken;
-      "70": DesignToken;
-      "90": DesignToken;
-    };
-    blue: {
-      "10": DesignToken;
-      "30": DesignToken;
-      "40": DesignToken;
-      "50": DesignToken;
-      "60": DesignToken;
-      "70": DesignToken;
-      "80": DesignToken;
-    };
-    red: {
-      "50": DesignToken;
-      "60": DesignToken;
-    };
-    gold: {
-      "10": DesignToken;
-      "20": DesignToken;
-    };
-    green: {
-      "50": DesignToken;
-    };
-  };
   font: {
     family: {
       sans: DesignToken;
@@ -83,5 +46,59 @@ declare const tokens: {
     "30": DesignToken;
     "40": DesignToken;
     "50": DesignToken;
+  };
+  color: {
+    white: DesignToken;
+    black: DesignToken;
+    gray: {
+      "5": DesignToken;
+      "10": DesignToken;
+      "30": DesignToken;
+      "50": DesignToken;
+      "70": DesignToken;
+      "90": DesignToken;
+    };
+    blue: {
+      "10": DesignToken;
+      "30": DesignToken;
+      "40": DesignToken;
+      "50": DesignToken;
+      "60": DesignToken;
+      "70": DesignToken;
+      "80": DesignToken;
+    };
+    red: {
+      "50": DesignToken;
+      "60": DesignToken;
+    };
+    gold: {
+      "10": DesignToken;
+      "20": DesignToken;
+    };
+    green: {
+      "50": DesignToken;
+    };
+    brand: {
+      primary: DesignToken;
+      gold: DesignToken;
+    };
+    theme: {
+      action: DesignToken;
+      surface: DesignToken;
+      text: {
+        primary: DesignToken;
+        secondary: DesignToken;
+      };
+      border: DesignToken;
+    };
+  };
+  button: {
+    primary: {
+      background: {
+        default: DesignToken;
+        hover: DesignToken;
+      };
+      text: DesignToken;
+    };
   };
 };

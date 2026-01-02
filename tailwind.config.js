@@ -24,8 +24,9 @@ function flattenTokens(obj, prefix = '') {
   return result;
 }
 
-const flatColors = flattenTokens(twTokens.uswds.color);
-const cmmColors = flattenTokens(twTokens.cmm.color);
+const flatColors = flattenTokens(twTokens.uswds.color, 'uswds-color');
+const cmmColors = flattenTokens(twTokens.cmm.color, 'cmm-color');
+const buttonColors = flattenTokens(twTokens.cmm.button, 'cmm-button');
 const fontFamilies = flattenTokens(twTokens.cmm.font.family);
 const fontWeights = flattenTokens(twTokens.cmm.font.weight);
 const fontSizes = flattenTokens(twTokens.cmm.size);
@@ -41,7 +42,7 @@ export default {
   ],
   theme: {
     extend: {
-      colors: { ...flatColors, ...cmmColors },
+      colors: { ...flatColors, ...cmmColors, ...buttonColors },
       fontFamily: fontFamilies,
       fontSize: fontSizes,
       fontWeight: fontWeights,

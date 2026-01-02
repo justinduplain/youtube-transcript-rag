@@ -1,0 +1,11 @@
+{
+  "button": {
+    "primary": {
+      "background": {
+        "default": { "value": "{color.theme.action}" },
+        "hover": { "value": "{color.blue.70}" }
+      },
+      "text": { "value": "{color.theme.surface}" }
+    }
+  }
+}

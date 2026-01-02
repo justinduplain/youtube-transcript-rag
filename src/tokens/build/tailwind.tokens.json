@@ -1,14 +1,5 @@
 {
   "cmm": {
-    "brand": {
-      "primary": "#005ea2"
-    },
-    "color": {
-      "brand": {
-        "primary": "#005ea2",
-        "gold": "#c29b40"
-      }
-    },
     "font": {
       "family": {
         "sans": "'Public Sans', system-ui, sans-serif",
@@ -42,10 +33,36 @@
         "40": "1.75",
         "50": "2"
       }
+    },
+    "color": {
+      "brand": {
+        "primary": "#005ea2",
+        "gold": "#c29b40"
+      },
+      "theme": {
+        "action": "#005ea2",
+        "surface": "#ffffff",
+        "text": {
+          "primary": "#1b1b1b",
+          "secondary": "#71767a"
+        },
+        "border": "#adadad"
+      }
+    },
+    "button": {
+      "primary": {
+        "background": {
+          "default": "#005ea2",
+          "hover": "#00487d"
+        },
+        "text": "#ffffff"
+      }
     }
   },
   "uswds": {
     "color": {
+      "white": "#ffffff",
+      "black": "#000000",
       "gray": {
         "5": "#f0f0f0",
         "10": "#e6e6e6",

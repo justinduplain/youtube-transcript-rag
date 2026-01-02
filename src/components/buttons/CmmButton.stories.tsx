@@ -28,8 +28,9 @@ type Story = StoryObj<typeof meta>;
 
 export const Primary: Story = {
   args: {
+    children: 'Primary Action',
     variant: 'primary',
-    children: 'Submit Primary',
+    type: 'button',
   },
   parameters: {
     docs: {
@@ -44,6 +45,7 @@ export const Gold: Story = {
   args: {
     variant: 'gold',
     children: 'Submit Gold',
+    type: 'button',
   },
   parameters: {
     docs: {

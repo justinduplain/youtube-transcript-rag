@@ -6,7 +6,7 @@ StyleDictionary.registerTransform({
   name: 'name/prefix-path',
   type: 'name',
   transform: (token) => {
-    const prefix = token.filePath.includes('tokens/uswds') ? 'uswds' : 'cmm';
+    const prefix = token.filePath.includes('base/uswds.json') ? 'uswds' : 'cmm';
     const newName = `${prefix}-${token.path.join('-')}`;
     return newName;
   }
@@ -64,7 +64,7 @@ const sd = new StyleDictionary({
         },
         { 
           destination: 'tailwind.tokens.json',
-          format: 'json/tailwind-nested' // ← CHANGED FROM 'json/nested'
+          format: 'json/tailwind-nested'
         }
       ]
     }

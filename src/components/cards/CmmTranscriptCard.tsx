@@ -1,5 +1,3 @@
-import React from 'react';
-
 export interface CmmTranscriptCardProps {
   /** The timestamp of the transcript segment (e.g., "00:23.123") */
   timestamp: string;

@@ -1,0 +1,23 @@
+{
+  "color": {
+    "brand": {
+      "primary": { 
+        "value": "{color.blue.60}", 
+        "comment": "CMM primary brand color, mapped to USWDS Blue 60"
+      },
+      "gold": {
+        "value": "#c29b40",
+        "comment": "Custom U.S. Courts specific branding"
+      }
+    },
+    "theme": {
+      "action": { "value": "{color.blue.60}" },
+      "surface": { "value": "{color.white}" },
+      "text": { 
+        "primary": { "value": "{color.gray.90}" },
+        "secondary": { "value": "{color.gray.50}" }
+      },
+      "border": { "value": "{color.gray.30}" }
+    }
+  }
+}

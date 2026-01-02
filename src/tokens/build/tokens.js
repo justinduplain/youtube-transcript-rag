@@ -3,388 +3,12 @@
  */
 
 export default {
-  brand: {
-    primary: {
-      key: "{brand.primary}",
-      value: "#005ea2",
-      filePath: "src/tokens/cmm/brand.json",
-      isSource: true,
-      original: {
-        value: "{color.blue.60}",
-        key: "{brand.primary}",
-      },
-      name: "cmm-brand-primary",
-      attributes: {
-        category: "brand",
-        type: "primary",
-      },
-      path: ["brand", "primary"],
-    },
-  },
-  color: {
-    brand: {
-      primary: {
-        key: "{color.brand.primary}",
-        value: "#005ea2",
-        comment: "CMM primary brand color, mapped to USWDS Blue 60",
-        filePath: "src/tokens/cmm/colors.json",
-        isSource: true,
-        original: {
-          value: "{color.blue.60}",
-          comment: "CMM primary brand color, mapped to USWDS Blue 60",
-          key: "{color.brand.primary}",
-        },
-        name: "cmm-color-brand-primary",
-        attributes: {
-          category: "color",
-          type: "brand",
-          item: "primary",
-        },
-        path: ["color", "brand", "primary"],
-      },
-      gold: {
-        key: "{color.brand.gold}",
-        value: "#c29b40",
-        comment: "Custom U.S. Courts specific branding",
-        filePath: "src/tokens/cmm/colors.json",
-        isSource: true,
-        original: {
-          value: "#c29b40",
-          comment: "Custom U.S. Courts specific branding",
-          key: "{color.brand.gold}",
-        },
-        name: "cmm-color-brand-gold",
-        attributes: {
-          category: "color",
-          type: "brand",
-          item: "gold",
-        },
-        path: ["color", "brand", "gold"],
-      },
-    },
-    gray: {
-      5: {
-        key: "{color.gray.5}",
-        value: "#f0f0f0",
-        filePath: "src/tokens/uswds/pallet.json",
-        isSource: true,
-        original: {
-          value: "#f0f0f0",
-          key: "{color.gray.5}",
-        },
-        name: "uswds-color-gray-5",
-        attributes: {
-          category: "color",
-          type: "gray",
-          item: "5",
-        },
-        path: ["color", "gray", "5"],
-      },
-      10: {
-        key: "{color.gray.10}",
-        value: "#e6e6e6",
-        filePath: "src/tokens/uswds/pallet.json",
-        isSource: true,
-        original: {
-          value: "#e6e6e6",
-          key: "{color.gray.10}",
-        },
-        name: "uswds-color-gray-10",
-        attributes: {
-          category: "color",
-          type: "gray",
-          item: "10",
-        },
-        path: ["color", "gray", "10"],
-      },
-      30: {
-        key: "{color.gray.30}",
-        value: "#adadad",
-        filePath: "src/tokens/uswds/pallet.json",
-        isSource: true,
-        original: {
-          value: "#adadad",
-          key: "{color.gray.30}",
-        },
-        name: "uswds-color-gray-30",
-        attributes: {
-          category: "color",
-          type: "gray",
-          item: "30",
-        },
-        path: ["color", "gray", "30"],
-      },
-      50: {
-        key: "{color.gray.50}",
-        value: "#71767a",
-        filePath: "src/tokens/uswds/pallet.json",
-        isSource: true,
-        original: {
-          value: "#71767a",
-          key: "{color.gray.50}",
-        },
-        name: "uswds-color-gray-50",
-        attributes: {
-          category: "color",
-          type: "gray",
-          item: "50",
-        },
-        path: ["color", "gray", "50"],
-      },
-      70: {
-        key: "{color.gray.70}",
-        value: "#454545",
-        filePath: "src/tokens/uswds/pallet.json",
-        isSource: true,
-        original: {
-          value: "#454545",
-          key: "{color.gray.70}",
-        },
-        name: "uswds-color-gray-70",
-        attributes: {
-          category: "color",
-          type: "gray",
-          item: "70",
-        },
-        path: ["color", "gray", "70"],
-      },
-      90: {
-        key: "{color.gray.90}",
-        value: "#1b1b1b",
-        filePath: "src/tokens/uswds/pallet.json",
-        isSource: true,
-        original: {
-          value: "#1b1b1b",
-          key: "{color.gray.90}",
-        },
-        name: "uswds-color-gray-90",
-        attributes: {
-          category: "color",
-          type: "gray",
-          item: "90",
-        },
-        path: ["color", "gray", "90"],
-      },
-    },
-    blue: {
-      10: {
-        key: "{color.blue.10}",
-        value: "#eff6fb",
-        filePath: "src/tokens/uswds/pallet.json",
-        isSource: true,
-        original: {
-          value: "#eff6fb",
-          key: "{color.blue.10}",
-        },
-        name: "uswds-color-blue-10",
-        attributes: {
-          category: "color",
-          type: "blue",
-          item: "10",
-        },
-        path: ["color", "blue", "10"],
-      },
-      30: {
-        key: "{color.blue.30}",
-        value: "#a9aeb1",
-        filePath: "src/tokens/uswds/pallet.json",
-        isSource: true,
-        original: {
-          value: "#a9aeb1",
-          key: "{color.blue.30}",
-        },
-        name: "uswds-color-blue-30",
-        attributes: {
-          category: "color",
-          type: "blue",
-          item: "30",
-        },
-        path: ["color", "blue", "30"],
-      },
-      40: {
-        key: "{color.blue.40}",
-        value: "#4f97d1",
-        filePath: "src/tokens/uswds/pallet.json",
-        isSource: true,
-        original: {
-          value: "#4f97d1",
-          key: "{color.blue.40}",
-        },
-        name: "uswds-color-blue-40",
-        attributes: {
-          category: "color",
-          type: "blue",
-          item: "40",
-        },
-        path: ["color", "blue", "40"],
-      },
-      50: {
-        key: "{color.blue.50}",
-        value: "#2e8540",
-        filePath: "src/tokens/uswds/pallet.json",
-        isSource: true,
-        original: {
-          value: "#2e8540",
-          key: "{color.blue.50}",
-        },
-        name: "uswds-color-blue-50",
-        attributes: {
-          category: "color",
-          type: "blue",
-          item: "50",
-        },
-        path: ["color", "blue", "50"],
-      },
-      60: {
-        key: "{color.blue.60}",
-        value: "#005ea2",
-        filePath: "src/tokens/uswds/pallet.json",
-        isSource: true,
-        original: {
-          value: "#005ea2",
-          key: "{color.blue.60}",
-        },
-        name: "uswds-color-blue-60",
-        attributes: {
-          category: "color",
-          type: "blue",
-          item: "60",
-        },
-        path: ["color", "blue", "60"],
-      },
-      70: {
-        key: "{color.blue.70}",
-        value: "#00487d",
-        filePath: "src/tokens/uswds/pallet.json",
-        isSource: true,
-        original: {
-          value: "#00487d",
-          key: "{color.blue.70}",
-        },
-        name: "uswds-color-blue-70",
-        attributes: {
-          category: "color",
-          type: "blue",
-          item: "70",
-        },
-        path: ["color", "blue", "70"],
-      },
-      80: {
-        key: "{color.blue.80}",
-        value: "#003257",
-        filePath: "src/tokens/uswds/pallet.json",
-        isSource: true,
-        original: {
-          value: "#003257",
-          key: "{color.blue.80}",
-        },
-        name: "uswds-color-blue-80",
-        attributes: {
-          category: "color",
-          type: "blue",
-          item: "80",
-        },
-        path: ["color", "blue", "80"],
-      },
-    },
-    red: {
-      50: {
-        key: "{color.red.50}",
-        value: "#d54309",
-        filePath: "src/tokens/uswds/pallet.json",
-        isSource: true,
-        original: {
-          value: "#d54309",
-          key: "{color.red.50}",
-        },
-        name: "uswds-color-red-50",
-        attributes: {
-          category: "color",
-          type: "red",
-          item: "50",
-        },
-        path: ["color", "red", "50"],
-      },
-      60: {
-        key: "{color.red.60}",
-        value: "#b50909",
-        filePath: "src/tokens/uswds/pallet.json",
-        isSource: true,
-        original: {
-          value: "#b50909",
-          key: "{color.red.60}",
-        },
-        name: "uswds-color-red-60",
-        attributes: {
-          category: "color",
-          type: "red",
-          item: "60",
-        },
-        path: ["color", "red", "60"],
-      },
-    },
-    gold: {
-      10: {
-        key: "{color.gold.10}",
-        value: "#fad980",
-        filePath: "src/tokens/uswds/pallet.json",
-        isSource: true,
-        original: {
-          value: "#fad980",
-          key: "{color.gold.10}",
-        },
-        name: "uswds-color-gold-10",
-        attributes: {
-          category: "color",
-          type: "gold",
-          item: "10",
-        },
-        path: ["color", "gold", "10"],
-      },
-      20: {
-        key: "{color.gold.20}",
-        value: "#f9c642",
-        filePath: "src/tokens/uswds/pallet.json",
-        isSource: true,
-        original: {
-          value: "#f9c642",
-          key: "{color.gold.20}",
-        },
-        name: "uswds-color-gold-20",
-        attributes: {
-          category: "color",
-          type: "gold",
-          item: "20",
-        },
-        path: ["color", "gold", "20"],
-      },
-    },
-    green: {
-      50: {
-        key: "{color.green.50}",
-        value: "#00a91c",
-        filePath: "src/tokens/uswds/pallet.json",
-        isSource: true,
-        original: {
-          value: "#00a91c",
-          key: "{color.green.50}",
-        },
-        name: "uswds-color-green-50",
-        attributes: {
-          category: "color",
-          type: "green",
-          item: "50",
-        },
-        path: ["color", "green", "50"],
-      },
-    },
-  },
   font: {
     family: {
       sans: {
         key: "{font.family.sans}",
         value: "'Public Sans', system-ui, sans-serif",
-        filePath: "src/tokens/cmm/typography.json",
+        filePath: "src/tokens/base/typography.json",
         isSource: true,
         original: {
           value: "'Public Sans', system-ui, sans-serif",
@@ -401,7 +25,7 @@ export default {
       serif: {
         key: "{font.family.serif}",
         value: "Georgia, serif",
-        filePath: "src/tokens/cmm/typography.json",
+        filePath: "src/tokens/base/typography.json",
         isSource: true,
         original: {
           value: "Georgia, serif",
@@ -418,7 +42,7 @@ export default {
       mono: {
         key: "{font.family.mono}",
         value: "monospace",
-        filePath: "src/tokens/cmm/typography.json",
+        filePath: "src/tokens/base/typography.json",
         isSource: true,
         original: {
           value: "monospace",
@@ -437,7 +61,7 @@ export default {
       light: {
         key: "{font.weight.light}",
         value: "300",
-        filePath: "src/tokens/cmm/typography.json",
+        filePath: "src/tokens/base/typography.json",
         isSource: true,
         original: {
           value: "300",
@@ -454,7 +78,7 @@ export default {
       regular: {
         key: "{font.weight.regular}",
         value: "400",
-        filePath: "src/tokens/cmm/typography.json",
+        filePath: "src/tokens/base/typography.json",
         isSource: true,
         original: {
           value: "400",
@@ -471,7 +95,7 @@ export default {
       medium: {
         key: "{font.weight.medium}",
         value: "500",
-        filePath: "src/tokens/cmm/typography.json",
+        filePath: "src/tokens/base/typography.json",
         isSource: true,
         original: {
           value: "500",
@@ -488,7 +112,7 @@ export default {
       semibold: {
         key: "{font.weight.semibold}",
         value: "600",
-        filePath: "src/tokens/cmm/typography.json",
+        filePath: "src/tokens/base/typography.json",
         isSource: true,
         original: {
           value: "600",
@@ -505,7 +129,7 @@ export default {
       bold: {
         key: "{font.weight.bold}",
         value: "700",
-        filePath: "src/tokens/cmm/typography.json",
+        filePath: "src/tokens/base/typography.json",
         isSource: true,
         original: {
           value: "700",
@@ -525,7 +149,7 @@ export default {
     10: {
       key: "{size.10}",
       value: "0.75rem",
-      filePath: "src/tokens/cmm/typography.json",
+      filePath: "src/tokens/base/typography.json",
       isSource: true,
       original: {
         value: "0.75rem",
@@ -541,7 +165,7 @@ export default {
     20: {
       key: "{size.20}",
       value: "0.875rem",
-      filePath: "src/tokens/cmm/typography.json",
+      filePath: "src/tokens/base/typography.json",
       isSource: true,
       original: {
         value: "0.875rem",
@@ -557,7 +181,7 @@ export default {
     30: {
       key: "{size.30}",
       value: "1rem",
-      filePath: "src/tokens/cmm/typography.json",
+      filePath: "src/tokens/base/typography.json",
       isSource: true,
       original: {
         value: "1rem",
@@ -573,7 +197,7 @@ export default {
     40: {
       key: "{size.40}",
       value: "1.125rem",
-      filePath: "src/tokens/cmm/typography.json",
+      filePath: "src/tokens/base/typography.json",
       isSource: true,
       original: {
         value: "1.125rem",
@@ -589,7 +213,7 @@ export default {
     50: {
       key: "{size.50}",
       value: "1.25rem",
-      filePath: "src/tokens/cmm/typography.json",
+      filePath: "src/tokens/base/typography.json",
       isSource: true,
       original: {
         value: "1.25rem",
@@ -605,7 +229,7 @@ export default {
     60: {
       key: "{size.60}",
       value: "1.5rem",
-      filePath: "src/tokens/cmm/typography.json",
+      filePath: "src/tokens/base/typography.json",
       isSource: true,
       original: {
         value: "1.5rem",
@@ -621,7 +245,7 @@ export default {
     70: {
       key: "{size.70}",
       value: "1.875rem",
-      filePath: "src/tokens/cmm/typography.json",
+      filePath: "src/tokens/base/typography.json",
       isSource: true,
       original: {
         value: "1.875rem",
@@ -637,7 +261,7 @@ export default {
     80: {
       key: "{size.80}",
       value: "2.25rem",
-      filePath: "src/tokens/cmm/typography.json",
+      filePath: "src/tokens/base/typography.json",
       isSource: true,
       original: {
         value: "2.25rem",
@@ -653,7 +277,7 @@ export default {
     90: {
       key: "{size.90}",
       value: "3rem",
-      filePath: "src/tokens/cmm/typography.json",
+      filePath: "src/tokens/base/typography.json",
       isSource: true,
       original: {
         value: "3rem",
@@ -671,7 +295,7 @@ export default {
     10: {
       key: "{line-height.10}",
       value: "1",
-      filePath: "src/tokens/cmm/typography.json",
+      filePath: "src/tokens/base/typography.json",
       isSource: true,
       original: {
         value: "1",
@@ -687,7 +311,7 @@ export default {
     20: {
       key: "{line-height.20}",
       value: "1.25",
-      filePath: "src/tokens/cmm/typography.json",
+      filePath: "src/tokens/base/typography.json",
       isSource: true,
       original: {
         value: "1.25",
@@ -703,7 +327,7 @@ export default {
     30: {
       key: "{line-height.30}",
       value: "1.5",
-      filePath: "src/tokens/cmm/typography.json",
+      filePath: "src/tokens/base/typography.json",
       isSource: true,
       original: {
         value: "1.5",
@@ -719,7 +343,7 @@ export default {
     40: {
       key: "{line-height.40}",
       value: "1.75",
-      filePath: "src/tokens/cmm/typography.json",
+      filePath: "src/tokens/base/typography.json",
       isSource: true,
       original: {
         value: "1.75",
@@ -735,7 +359,7 @@ export default {
     50: {
       key: "{line-height.50}",
       value: "2",
-      filePath: "src/tokens/cmm/typography.json",
+      filePath: "src/tokens/base/typography.json",
       isSource: true,
       original: {
         value: "2",
@@ -747,6 +371,546 @@ export default {
         type: "50",
       },
       path: ["line-height", "50"],
+    },
+  },
+  color: {
+    white: {
+      key: "{color.white}",
+      value: "#ffffff",
+      filePath: "src/tokens/base/uswds.json",
+      isSource: true,
+      original: {
+        value: "#ffffff",
+        key: "{color.white}",
+      },
+      name: "uswds-color-white",
+      attributes: {
+        category: "color",
+        type: "white",
+      },
+      path: ["color", "white"],
+    },
+    black: {
+      key: "{color.black}",
+      value: "#000000",
+      filePath: "src/tokens/base/uswds.json",
+      isSource: true,
+      original: {
+        value: "#000000",
+        key: "{color.black}",
+      },
+      name: "uswds-color-black",
+      attributes: {
+        category: "color",
+        type: "black",
+      },
+      path: ["color", "black"],
+    },
+    gray: {
+      5: {
+        key: "{color.gray.5}",
+        value: "#f0f0f0",
+        filePath: "src/tokens/base/uswds.json",
+        isSource: true,
+        original: {
+          value: "#f0f0f0",
+          key: "{color.gray.5}",
+        },
+        name: "uswds-color-gray-5",
+        attributes: {
+          category: "color",
+          type: "gray",
+          item: "5",
+        },
+        path: ["color", "gray", "5"],
+      },
+      10: {
+        key: "{color.gray.10}",
+        value: "#e6e6e6",
+        filePath: "src/tokens/base/uswds.json",
+        isSource: true,
+        original: {
+          value: "#e6e6e6",
+          key: "{color.gray.10}",
+        },
+        name: "uswds-color-gray-10",
+        attributes: {
+          category: "color",
+          type: "gray",
+          item: "10",
+        },
+        path: ["color", "gray", "10"],
+      },
+      30: {
+        key: "{color.gray.30}",
+        value: "#adadad",
+        filePath: "src/tokens/base/uswds.json",
+        isSource: true,
+        original: {
+          value: "#adadad",
+          key: "{color.gray.30}",
+        },
+        name: "uswds-color-gray-30",
+        attributes: {
+          category: "color",
+          type: "gray",
+          item: "30",
+        },
+        path: ["color", "gray", "30"],
+      },
+      50: {
+        key: "{color.gray.50}",
+        value: "#71767a",
+        filePath: "src/tokens/base/uswds.json",
+        isSource: true,
+        original: {
+          value: "#71767a",
+          key: "{color.gray.50}",
+        },
+        name: "uswds-color-gray-50",
+        attributes: {
+          category: "color",
+          type: "gray",
+          item: "50",
+        },
+        path: ["color", "gray", "50"],
+      },
+      70: {
+        key: "{color.gray.70}",
+        value: "#454545",
+        filePath: "src/tokens/base/uswds.json",
+        isSource: true,
+        original: {
+          value: "#454545",
+          key: "{color.gray.70}",
+        },
+        name: "uswds-color-gray-70",
+        attributes: {
+          category: "color",
+          type: "gray",
+          item: "70",
+        },
+        path: ["color", "gray", "70"],
+      },
+      90: {
+        key: "{color.gray.90}",
+        value: "#1b1b1b",
+        filePath: "src/tokens/base/uswds.json",
+        isSource: true,
+        original: {
+          value: "#1b1b1b",
+          key: "{color.gray.90}",
+        },
+        name: "uswds-color-gray-90",
+        attributes: {
+          category: "color",
+          type: "gray",
+          item: "90",
+        },
+        path: ["color", "gray", "90"],
+      },
+    },
+    blue: {
+      10: {
+        key: "{color.blue.10}",
+        value: "#eff6fb",
+        filePath: "src/tokens/base/uswds.json",
+        isSource: true,
+        original: {
+          value: "#eff6fb",
+          key: "{color.blue.10}",
+        },
+        name: "uswds-color-blue-10",
+        attributes: {
+          category: "color",
+          type: "blue",
+          item: "10",
+        },
+        path: ["color", "blue", "10"],
+      },
+      30: {
+        key: "{color.blue.30}",
+        value: "#a9aeb1",
+        filePath: "src/tokens/base/uswds.json",
+        isSource: true,
+        original: {
+          value: "#a9aeb1",
+          key: "{color.blue.30}",
+        },
+        name: "uswds-color-blue-30",
+        attributes: {
+          category: "color",
+          type: "blue",
+          item: "30",
+        },
+        path: ["color", "blue", "30"],
+      },
+      40: {
+        key: "{color.blue.40}",
+        value: "#4f97d1",
+        filePath: "src/tokens/base/uswds.json",
+        isSource: true,
+        original: {
+          value: "#4f97d1",
+          key: "{color.blue.40}",
+        },
+        name: "uswds-color-blue-40",
+        attributes: {
+          category: "color",
+          type: "blue",
+          item: "40",
+        },
+        path: ["color", "blue", "40"],
+      },
+      50: {
+        key: "{color.blue.50}",
+        value: "#2e8540",
+        filePath: "src/tokens/base/uswds.json",
+        isSource: true,
+        original: {
+          value: "#2e8540",
+          key: "{color.blue.50}",
+        },
+        name: "uswds-color-blue-50",
+        attributes: {
+          category: "color",
+          type: "blue",
+          item: "50",
+        },
+        path: ["color", "blue", "50"],
+      },
+      60: {
+        key: "{color.blue.60}",
+        value: "#005ea2",
+        filePath: "src/tokens/base/uswds.json",
+        isSource: true,
+        original: {
+          value: "#005ea2",
+          key: "{color.blue.60}",
+        },
+        name: "uswds-color-blue-60",
+        attributes: {
+          category: "color",
+          type: "blue",
+          item: "60",
+        },
+        path: ["color", "blue", "60"],
+      },
+      70: {
+        key: "{color.blue.70}",
+        value: "#00487d",
+        filePath: "src/tokens/base/uswds.json",
+        isSource: true,
+        original: {
+          value: "#00487d",
+          key: "{color.blue.70}",
+        },
+        name: "uswds-color-blue-70",
+        attributes: {
+          category: "color",
+          type: "blue",
+          item: "70",
+        },
+        path: ["color", "blue", "70"],
+      },
+      80: {
+        key: "{color.blue.80}",
+        value: "#003257",
+        filePath: "src/tokens/base/uswds.json",
+        isSource: true,
+        original: {
+          value: "#003257",
+          key: "{color.blue.80}",
+        },
+        name: "uswds-color-blue-80",
+        attributes: {
+          category: "color",
+          type: "blue",
+          item: "80",
+        },
+        path: ["color", "blue", "80"],
+      },
+    },
+    red: {
+      50: {
+        key: "{color.red.50}",
+        value: "#d54309",
+        filePath: "src/tokens/base/uswds.json",
+        isSource: true,
+        original: {
+          value: "#d54309",
+          key: "{color.red.50}",
+        },
+        name: "uswds-color-red-50",
+        attributes: {
+          category: "color",
+          type: "red",
+          item: "50",
+        },
+        path: ["color", "red", "50"],
+      },
+      60: {
+        key: "{color.red.60}",
+        value: "#b50909",
+        filePath: "src/tokens/base/uswds.json",
+        isSource: true,
+        original: {
+          value: "#b50909",
+          key: "{color.red.60}",
+        },
+        name: "uswds-color-red-60",
+        attributes: {
+          category: "color",
+          type: "red",
+          item: "60",
+        },
+        path: ["color", "red", "60"],
+      },
+    },
+    gold: {
+      10: {
+        key: "{color.gold.10}",
+        value: "#fad980",
+        filePath: "src/tokens/base/uswds.json",
+        isSource: true,
+        original: {
+          value: "#fad980",
+          key: "{color.gold.10}",
+        },
+        name: "uswds-color-gold-10",
+        attributes: {
+          category: "color",
+          type: "gold",
+          item: "10",
+        },
+        path: ["color", "gold", "10"],
+      },
+      20: {
+        key: "{color.gold.20}",
+        value: "#f9c642",
+        filePath: "src/tokens/base/uswds.json",
+        isSource: true,
+        original: {
+          value: "#f9c642",
+          key: "{color.gold.20}",
+        },
+        name: "uswds-color-gold-20",
+        attributes: {
+          category: "color",
+          type: "gold",
+          item: "20",
+        },
+        path: ["color", "gold", "20"],
+      },
+    },
+    green: {
+      50: {
+        key: "{color.green.50}",
+        value: "#00a91c",
+        filePath: "src/tokens/base/uswds.json",
+        isSource: true,
+        original: {
+          value: "#00a91c",
+          key: "{color.green.50}",
+        },
+        name: "uswds-color-green-50",
+        attributes: {
+          category: "color",
+          type: "green",
+          item: "50",
+        },
+        path: ["color", "green", "50"],
+      },
+    },
+    brand: {
+      primary: {
+        key: "{color.brand.primary}",
+        value: "#005ea2",
+        comment: "CMM primary brand color, mapped to USWDS Blue 60",
+        filePath: "src/tokens/semantic/color.json",
+        isSource: true,
+        original: {
+          value: "{color.blue.60}",
+          comment: "CMM primary brand color, mapped to USWDS Blue 60",
+          key: "{color.brand.primary}",
+        },
+        name: "cmm-color-brand-primary",
+        attributes: {
+          category: "color",
+          type: "brand",
+          item: "primary",
+        },
+        path: ["color", "brand", "primary"],
+      },
+      gold: {
+        key: "{color.brand.gold}",
+        value: "#c29b40",
+        comment: "Custom U.S. Courts specific branding",
+        filePath: "src/tokens/semantic/color.json",
+        isSource: true,
+        original: {
+          value: "#c29b40",
+          comment: "Custom U.S. Courts specific branding",
+          key: "{color.brand.gold}",
+        },
+        name: "cmm-color-brand-gold",
+        attributes: {
+          category: "color",
+          type: "brand",
+          item: "gold",
+        },
+        path: ["color", "brand", "gold"],
+      },
+    },
+    theme: {
+      action: {
+        key: "{color.theme.action}",
+        value: "#005ea2",
+        filePath: "src/tokens/semantic/color.json",
+        isSource: true,
+        original: {
+          value: "{color.blue.60}",
+          key: "{color.theme.action}",
+        },
+        name: "cmm-color-theme-action",
+        attributes: {
+          category: "color",
+          type: "theme",
+          item: "action",
+        },
+        path: ["color", "theme", "action"],
+      },
+      surface: {
+        key: "{color.theme.surface}",
+        value: "#ffffff",
+        filePath: "src/tokens/semantic/color.json",
+        isSource: true,
+        original: {
+          value: "{color.white}",
+          key: "{color.theme.surface}",
+        },
+        name: "cmm-color-theme-surface",
+        attributes: {
+          category: "color",
+          type: "theme",
+          item: "surface",
+        },
+        path: ["color", "theme", "surface"],
+      },
+      text: {
+        primary: {
+          key: "{color.theme.text.primary}",
+          value: "#1b1b1b",
+          filePath: "src/tokens/semantic/color.json",
+          isSource: true,
+          original: {
+            value: "{color.gray.90}",
+            key: "{color.theme.text.primary}",
+          },
+          name: "cmm-color-theme-text-primary",
+          attributes: {
+            category: "color",
+            type: "theme",
+            item: "text",
+            subitem: "primary",
+          },
+          path: ["color", "theme", "text", "primary"],
+        },
+        secondary: {
+          key: "{color.theme.text.secondary}",
+          value: "#71767a",
+          filePath: "src/tokens/semantic/color.json",
+          isSource: true,
+          original: {
+            value: "{color.gray.50}",
+            key: "{color.theme.text.secondary}",
+          },
+          name: "cmm-color-theme-text-secondary",
+          attributes: {
+            category: "color",
+            type: "theme",
+            item: "text",
+            subitem: "secondary",
+          },
+          path: ["color", "theme", "text", "secondary"],
+        },
+      },
+      border: {
+        key: "{color.theme.border}",
+        value: "#adadad",
+        filePath: "src/tokens/semantic/color.json",
+        isSource: true,
+        original: {
+          value: "{color.gray.30}",
+          key: "{color.theme.border}",
+        },
+        name: "cmm-color-theme-border",
+        attributes: {
+          category: "color",
+          type: "theme",
+          item: "border",
+        },
+        path: ["color", "theme", "border"],
+      },
+    },
+  },
+  button: {
+    primary: {
+      background: {
+        default: {
+          key: "{button.primary.background.default}",
+          value: "#005ea2",
+          filePath: "src/tokens/component/button.json",
+          isSource: true,
+          original: {
+            value: "{color.theme.action}",
+            key: "{button.primary.background.default}",
+          },
+          name: "cmm-button-primary-background-default",
+          attributes: {
+            category: "button",
+            type: "primary",
+            item: "background",
+            subitem: "default",
+          },
+          path: ["button", "primary", "background", "default"],
+        },
+        hover: {
+          key: "{button.primary.background.hover}",
+          value: "#00487d",
+          filePath: "src/tokens/component/button.json",
+          isSource: true,
+          original: {
+            value: "{color.blue.70}",
+            key: "{button.primary.background.hover}",
+          },
+          name: "cmm-button-primary-background-hover",
+          attributes: {
+            category: "button",
+            type: "primary",
+            item: "background",
+            subitem: "hover",
+          },
+          path: ["button", "primary", "background", "hover"],
+        },
+      },
+      text: {
+        key: "{button.primary.text}",
+        value: "#ffffff",
+        filePath: "src/tokens/component/button.json",
+        isSource: true,
+        original: {
+          value: "{color.theme.surface}",
+          key: "{button.primary.text}",
+        },
+        name: "cmm-button-primary-text",
+        attributes: {
+          category: "button",
+          type: "primary",
+          item: "text",
+        },
+        path: ["button", "primary", "text"],
+      },
     },
   },
 };

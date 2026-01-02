@@ -18,7 +18,7 @@ export const CmmUrlInput = ({
 }: CmmUrlInputProps) => {
   return (
     // FormGroup handles the red border logic automatically when error=true
-    <FormGroup error={error ? 'true' : undefined} className={className}>
+    <FormGroup error={!!error} className={className}>
       
       <Label 
         htmlFor={id} 
@@ -45,7 +45,7 @@ export const CmmUrlInput = ({
         type="url"
         aria-describedby={error ? `${id}-error-message` : undefined}
         // Tailwind utilities layer wins over USWDS defaults
-        className="max-w-xl focus:ring-cmm-brand-primary" 
+        className="max-w-xl focus:ring-cmm-color-brand-primary" 
         error={error ? 'true' : undefined}
         {...props}
       />
