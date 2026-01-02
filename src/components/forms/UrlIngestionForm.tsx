@@ -35,7 +35,7 @@ export const UrlIngestionForm = ({ onSubmit, isLoading = false }: UrlIngestionFo
             disabled={isLoading}
           />
         </div>
-        <div className="grid-col-auto display-flex flex-align-end padding-bottom-1">
+        <div className="grid-col-auto display-flex flex-align-end">
           <CmmButton 
             type="submit" 
             variant="gold"

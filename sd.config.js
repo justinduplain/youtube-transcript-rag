@@ -8,7 +8,6 @@ StyleDictionary.registerTransform({
   transform: (token) => {
     const prefix = token.filePath.includes('tokens/uswds') ? 'uswds' : 'cmm';
     const newName = `${prefix}-${token.path.join('-')}`;
-    console.log(`Transform: ${token.path.join('-')} -> ${newName}`); // DEBUG
     return newName;
   }
 });

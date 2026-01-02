@@ -2,15 +2,15 @@
 
 /* 1. Define Layer Priority */
 /* We establish 'base' as the lowest priority. */
-/* Note: We don't list 'utilities' here because we want them Unlayered (Super Priority). */
-@layer base, uswds, cmm;
+/* Note: We list 'utilities' last so they have Super Priority. */
+@layer base, uswds, cmm, utilities;
 
 /* 2. Imports (MUST be the very first rules) */
 @import url('https://fonts.googleapis.com/css2?family=Public+Sans:wght@300;400;500;600;700&display=swap');
 @import './styles/generated/tokens.css';
 
 /* Import USWDS into a container layer so it's easily overridden */
-@import "@uswds/uswds/css/uswds.css" layer(uswds);
+@import "@trussworks/react-uswds/lib/uswds.css" layer(uswds);
 
 /* 3. Base Layer (The Reset) */
 /* We wrap 'base' so Tailwind's reset is lower priority than USWDS styles. */
@@ -23,11 +23,27 @@
   :root {
     --font-sans: 'Public Sans', sans-serif; 
   }
+
+  /*
+   * CMM Button Overrides
+   * We match the specificity of the USWDS default button selector
+   * (e.g., button.usa-button) so that layer order determines the winner.
+   * Since 'cmm' layer comes after 'uswds', these styles will win.
+   */
+  button.usa-button.cmm-button.cmm-button--gold {
+    background-color: var(--cmm-color-brand-gold);
+    font-weight: var(--cmm-font-weight-regular);
+  }
+
+  button.usa-button.cmm-button.cmm-button--gold:hover {
+    background-color: var(--uswds-color-gold-20);
+  }
 }
 
-/* 5. Directives (Unlayered) */
-/* We leave these at the root. */
-/* This ensures Tailwind generates the CSS without nesting bugs. */
-/* Unlayered styles automatically beat Layered styles in CSS specificity. */
+/* 5. Directives (Now Layered) */
+/* We leave components at the root, but layer utilities */
 @tailwind components;
-@tailwind utilities;
+
+@layer utilities {
+  @tailwind utilities;
+}

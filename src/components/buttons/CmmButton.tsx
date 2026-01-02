@@ -12,14 +12,17 @@ export const CmmButton = ({
   ...props 
 }: CmmButtonProps) => {
 
+  // The 'cmm-button' class provides a hook for targeted overrides
+  const baseClasses = 'cmm-button';
+
   const variantClasses = 
     variant === 'gold' 
-      ? 'bg-cmm-color-brand-gold text-black hover:bg-yellow-400'
+      ? 'cmm-button--gold text-black' // Style is now handled in index.css
       : 'bg-cmm-color-brand-primary hover:bg-uswds-color-blue-70';
 
   return (
     <Button
-      className={`${variantClasses} ${className || ''}`}
+      className={`${baseClasses} ${variantClasses} ${className || ''}`}
       {...props}
     >
       {children}
