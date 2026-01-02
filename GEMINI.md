@@ -38,14 +38,14 @@ This project specifically targets the **UI Styling Specialist** competencies:
 ## 4. Current State (Frontend)
 * **Token Pipeline:** Functional. `sd.config.js` generates CSS variables and a flat JSON file for Tailwind.
 * **Component Library:**
-    * `CmmButton`: A multi-variant wrapper around USWDS Button (Primary/Gold) demonstrating specific brand overrides.
+    * `CmmButton`: A multi-variant wrapper around USWDS Button (Primary/Gold) demonstrating brand-specific overrides implemented via custom CSS rules within the `cmm` layer, leveraging cascade layer precedence.
     * `CmmUrlInput`: A 508-compliant form group for data ingestion.
-* **Layer Architecture:** `index.css` successfully implements the cascade layers to allow Tailwind utilities (`!bg-cmm-gold`) to override USWDS specificity.
+* **Layer Architecture:** `index.css` successfully implements cascade layers (`base`, `uswds`, `cmm`, `utilities`) to manage specificity, ensuring `cmm` overrides USWDS defaults and unlayered Tailwind utilities maintain their priority without relying on `!important` prefixes.
 
 ## 5. Roadmap & Next Steps
 
 ### Phase 1: Advanced UI & Tokens (CMM Study)
-- [ ] **Typography Tokenization:** Abstract font families (`Inter`, `Merriweather`) and weights into `src/tokens/cmm/typography.json`.
+- [x] **Typography Tokenization:** Abstract font families (`Inter`, `Merriweather`) and weights into `src/tokens/cmm/typography.json`.
 - [ ] **Custom Transcript Card:** Create a high-density data display component (typical of Case Management systems) using the new typography tokens.
 - [ ] **Accessibility Audit:** Run an automated audit (Lighthouse/Axe) on the Ingestion Form to verify 508 compliance.
 
