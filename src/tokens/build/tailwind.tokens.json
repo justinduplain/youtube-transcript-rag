@@ -8,6 +8,40 @@
         "primary": "#005ea2",
         "gold": "#c29b40"
       }
+    },
+    "font": {
+      "family": {
+        "sans": "'Public Sans', system-ui, sans-serif",
+        "serif": "Georgia, serif",
+        "mono": "monospace"
+      },
+      "weight": {
+        "light": "300",
+        "regular": "400",
+        "medium": "500",
+        "semibold": "600",
+        "bold": "700"
+      }
+    },
+    "size": {
+      "10": "0.75rem",
+      "20": "0.875rem",
+      "30": "1rem",
+      "40": "1.125rem",
+      "50": "1.25rem",
+      "60": "1.5rem",
+      "70": "1.875rem",
+      "80": "2.25rem",
+      "90": "3rem"
+    },
+    "line": {
+      "height": {
+        "10": "1",
+        "20": "1.25",
+        "30": "1.5",
+        "40": "1.75",
+        "50": "2"
+      }
     }
   },
   "uswds": {

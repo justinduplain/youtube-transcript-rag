@@ -52,4 +52,36 @@ declare const tokens: {
       "50": DesignToken;
     };
   };
+  font: {
+    family: {
+      sans: DesignToken;
+      serif: DesignToken;
+      mono: DesignToken;
+    };
+    weight: {
+      light: DesignToken;
+      regular: DesignToken;
+      medium: DesignToken;
+      semibold: DesignToken;
+      bold: DesignToken;
+    };
+  };
+  size: {
+    "10": DesignToken;
+    "20": DesignToken;
+    "30": DesignToken;
+    "40": DesignToken;
+    "50": DesignToken;
+    "60": DesignToken;
+    "70": DesignToken;
+    "80": DesignToken;
+    "90": DesignToken;
+  };
+  "line-height": {
+    "10": DesignToken;
+    "20": DesignToken;
+    "30": DesignToken;
+    "40": DesignToken;
+    "50": DesignToken;
+  };
 };

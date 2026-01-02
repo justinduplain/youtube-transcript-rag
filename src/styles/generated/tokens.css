@@ -24,4 +24,26 @@
   --uswds-color-gold-10: #fad980;
   --uswds-color-gold-20: #f9c642;
   --uswds-color-green-50: #00a91c;
+  --cmm-font-family-sans: 'Public Sans', system-ui, sans-serif;
+  --cmm-font-family-serif: Georgia, serif;
+  --cmm-font-family-mono: monospace;
+  --cmm-font-weight-light: 300;
+  --cmm-font-weight-regular: 400;
+  --cmm-font-weight-medium: 500;
+  --cmm-font-weight-semibold: 600;
+  --cmm-font-weight-bold: 700;
+  --cmm-size-10: 0.75rem;
+  --cmm-size-20: 0.875rem;
+  --cmm-size-30: 1rem;
+  --cmm-size-40: 1.125rem;
+  --cmm-size-50: 1.25rem;
+  --cmm-size-60: 1.5rem;
+  --cmm-size-70: 1.875rem;
+  --cmm-size-80: 2.25rem;
+  --cmm-size-90: 3rem;
+  --cmm-line-height-10: 1;
+  --cmm-line-height-20: 1.25;
+  --cmm-line-height-30: 1.5;
+  --cmm-line-height-40: 1.75;
+  --cmm-line-height-50: 2;
 }

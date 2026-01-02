@@ -1,0 +1,35 @@
+
+{
+  "font": {
+    "family": {
+      "sans": { "value": "'Public Sans', system-ui, sans-serif" },
+      "serif": { "value": "Georgia, serif" },
+      "mono": { "value": "monospace" }
+    },
+    "weight": {
+      "light": { "value": "300" },
+      "regular": { "value": "400" },
+      "medium": { "value": "500" },
+      "semibold": { "value": "600" },
+      "bold": { "value": "700" }
+    }
+  },
+  "size": {
+    "10": { "value": "0.75rem" },
+    "20": { "value": "0.875rem" },
+    "30": { "value": "1rem" },
+    "40": { "value": "1.125rem" },
+    "50": { "value": "1.25rem" },
+    "60": { "value": "1.5rem" },
+    "70": { "value": "1.875rem" },
+    "80": { "value": "2.25rem" },
+    "90": { "value": "3rem" }
+  },
+  "line-height": {
+    "10": { "value": "1" },
+    "20": { "value": "1.25" },
+    "30": { "value": "1.5" },
+    "40": { "value": "1.75" },
+    "50": { "value": "2" }
+  }
+}

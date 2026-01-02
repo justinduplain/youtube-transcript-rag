@@ -6,6 +6,7 @@
 @layer base, uswds, cmm;
 
 /* 2. Imports (MUST be the very first rules) */
+@import url('https://fonts.googleapis.com/css2?family=Public+Sans:wght@300;400;500;600;700&display=swap');
 @import './styles/generated/tokens.css';
 
 /* Import USWDS into a container layer so it's easily overridden */
@@ -20,7 +21,7 @@
 /* 4. CMM Overrides Layer */
 @layer cmm {
   :root {
-    --font-sans: 'Inter', sans-serif; 
+    --font-sans: 'Public Sans', sans-serif; 
   }
 }
 
