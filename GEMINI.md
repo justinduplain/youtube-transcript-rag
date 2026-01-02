@@ -49,10 +49,14 @@ This project specifically targets the **UI Styling Specialist** competencies:
 
 ## 5. Roadmap & Next Steps
 
-### Phase 1: Advanced UI & Tokens (CMM Study)
-- [x] **Typography Tokenization:** Abstract font families (`Inter`, `Merriweather`) and weights into `src/tokens/cmm/typography.json`.
-- [x] **Custom Transcript Card:** Create a high-density data display component (typical of Case Management systems) using the new typography tokens.
-- [ ] **Accessibility Audit:** Run an automated audit (Lighthouse/Axe) on the Ingestion Form to verify 508 compliance.
+### Phase 1: Advanced UI & DesignOps (GDIT Skill Gap Closure)
+* [x] **Typography Tokenization:** Abstract font families (`Inter`, `Merriweather`) and weights into `src/tokens/cmm/typography.json`.
+* [x] **Custom Transcript Card:** Create a high-density data display component (typical of Case Management systems) using the new typography tokens.
+* [ ] **Automated "Zero Trust" Accessibility Pipeline:**
+    * Install `storybook-addon-a11y` to visualize WCAG compliance in real-time.
+    * Install `vitest-axe` and implement a unit test that asserts `expect(container).toHaveNoViolations()` for the `CmmTranscriptCard`.
+* [ ] **Semantic Token "Aliasing" (DesignOps):** Refactor `src/tokens` to use a 3-tier structure (Base -> Semantic -> Component). Update Style Dictionary to resolve aliases (e.g., `button.primary.bg` -> `color.action.blue` -> `#005ea2`).
+* [ ] **High-Performance Virtualization:** Implement `@tanstack/react-virtual` for the Transcript Viewer to render large datasets without DOM performance degradation. Aim for TTI < 2s.
 
 ### Phase 2: Backend RAG Implementation
 - [ ] **Initialize Python Environment:** Set up `poetry` or `venv` with FastAPI dependencies.
@@ -60,9 +64,10 @@ This project specifically targets the **UI Styling Specialist** competencies:
 - [ ] **Transcript Service:** Implement the logic to fetch and clean YouTube subtitles.
 - [ ] **Vector Store Connection:** Set up the embedding model and database connection.
 
-### Phase 3: Integration
-- [ ] Connect the React `IngestionForm` to the FastAPI backend.
-- [ ] Implement a "Streaming Chat" interface for the RAG results.
+### Phase 3: Integration & State Management
+- [ ] **Deep Link State Optimization:** Create a custom `useTranscriptSync` hook to manage focus between the video player and transcript list without causing full-list re-renders (using `React.memo`).
+- [ ] **Connect Frontend/Backend:** Link React `IngestionForm` to FastAPI endpoints.
+- [ ] **Streaming Chat Interface:** Build the chat UI for RAG results.
 
 ### Phase 4: Multi-Video & Channel-Level Intelligence
 
@@ -83,4 +88,4 @@ Keep these instrucitons in mind when performing tasks:
 - New components should always be created with their accompanying story in Storybook
 - Component updates and new patters should also be addressed in Storybook
 - Do not inherintely run any `git` command, `npm start dev`, `npm start storybook`, `npm run build`, or `npm i` actions unless explicitly instructed. Instead ask the user to run these commands and report back the results.
-- Keep GEMINI.md and README.md updated as necessary. 
+- Keep GEMINI.md and README.md updated as necessary.
