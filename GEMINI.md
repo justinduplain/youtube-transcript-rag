@@ -46,7 +46,7 @@ This project specifically targets the **UI Styling Specialist** competencies:
 
 ### Phase 1: Advanced UI & Tokens (CMM Study)
 - [x] **Typography Tokenization:** Abstract font families (`Inter`, `Merriweather`) and weights into `src/tokens/cmm/typography.json`.
-- [ ] **Custom Transcript Card:** Create a high-density data display component (typical of Case Management systems) using the new typography tokens.
+- [x] **Custom Transcript Card:** Create a high-density data display component (typical of Case Management systems) using the new typography tokens.
 - [ ] **Accessibility Audit:** Run an automated audit (Lighthouse/Axe) on the Ingestion Form to verify 508 compliance.
 
 ### Phase 2: Backend RAG Implementation
@@ -72,3 +72,9 @@ Channel Ingestion: Implement a crawler to fetch all (or a subset of) videos from
 Temporal Filtering: Add time-window controls (e.g., "Ingest videos published between Jan 2023 and Dec 2023") to refine the context.
 
 Cross-Reference Synthesis: Enable the RAG engine to draw connections and contrast information across multiple videos, providing deeper context and comprehensive topic coverage.
+
+## Custom Instructions
+Keep these instrucitons in mind when performing tasks: 
+- New components should always be created with their accompanying story in Storybook
+- Component updates and new patters should also be addressed in Storybook
+- Do not inherintely run any `git` command, `npm start dev`, `npm start storybook`, `npm run build`, or `npm i` actions unless explicitly instructed. Instead ask the user to run these commands and report back the results. 
