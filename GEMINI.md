@@ -46,17 +46,34 @@ This project specifically targets the **UI Styling Specialist** competencies:
 * **Pagination:** Accessible, URL-driven pagination system integrated for list displays.
 * **Storybook Documentation:** Comprehensive descriptions added to all existing Storybook stories for better context and understanding.
 * **Layer Architecture:** `index.css` successfully implements cascade layers (`base`, `uswds`, `cmm`, `utilities`) to manage specificity, ensuring `cmm` overrides USWDS defaults and unlayered Tailwind utilities maintain their priority without relying on `!important` prefixes.
+* **Typography Tokenization:** Abstracted font families (`Inter`, `Merriweather`) and weights into `src/tokens/cmm/typography.json`.
+* **Custom Transcript Card:** Created a high-density data display component (typical of Case Management systems) using the new typography tokens.
+* **Automated "Zero Trust" Accessibility Pipeline:**
+    * Installed `storybook-addon-a11y` to visualize WCAG compliance in real-time.
+    * Installed `vitest-axe` and implemented a unit test that asserts `expect(container).toHaveNoViolations()` for the `CmmTranscriptCard`.
+* **Semantic Token "Aliasing" (DesignOps):** Refactor `src/tokens` to use a 3-tier structure (Base -> Semantic -> Component). Update Style Dictionary to resolve aliases (e.g., `button.primary.bg` -> `color.action.blue` -> `#005ea2`).
 
 ## 5. Roadmap & Next Steps
 
 ### Phase 1: Advanced UI & DesignOps (GDIT Skill Gap Closure)
-* [x] **Typography Tokenization:** Abstract font families (`Inter`, `Merriweather`) and weights into `src/tokens/cmm/typography.json`.
-* [x] **Custom Transcript Card:** Create a high-density data display component (typical of Case Management systems) using the new typography tokens.
-* [x] **Automated "Zero Trust" Accessibility Pipeline:**
-    * [x] Install `storybook-addon-a11y` to visualize WCAG compliance in real-time.
-    * [x] Install `vitest-axe` and implement a unit test that asserts `expect(container).toHaveNoViolations()` for the `CmmTranscriptCard`.
-* [x] **Semantic Token "Aliasing" (DesignOps):** Refactor `src/tokens` to use a 3-tier structure (Base -> Semantic -> Component). Update Style Dictionary to resolve aliases (e.g., `button.primary.bg` -> `color.action.blue` -> `#005ea2`).
 * [ ] **High-Performance Virtualization:** Implement `@tanstack/react-virtual` for the Transcript Viewer to render large datasets without DOM performance degradation. Aim for TTI < 2s.
+
+#### Phase 1.5: Further Study and GDIT Skills Gap Closure
+* [ ] **DevSecOps Containerization (DevContainers)II
+Why: This is specifically designed for local environments. By setting up .devcontainer, you prove you can enforce a standard environment for any developer who clones your repo, mirroring how federal teams standardize onboarding.
+Local Action: Install Docker Desktop and the "Dev Containers" extension in VS Code. Create the config to lock your Node version and extensions.
+
+* [ ] **Federal Accessibility Standards (Trusted Tester V5 + VPAT)**
+Why: This is a manual auditing process. It requires no infrastructure, just your browser and a spreadsheet (the VPAT).
+Local Action: Install the "ANDI" (Accessible Name & Description Inspector) browser bookmarklet (the modern alternative to WAT) and fill out a mock VPAT for your CmmTranscriptCard.
+
+* [ ] **Design System Governance & Versioning**
+Why: This operates entirely within Git. You don't need a remote CI server to manage versioning.
+Local Action: Install @changesets/cli. Run npx changeset locally after making a CSS change to see how it generates a changelog entry.
+
+* [ ] **SSR Hydration & Performance**
+Why: This is pure code. You can test "Flash of Unstyled Content" (FOUC) by throttling your network speed in Chrome DevTools to "Slow 3G" running on localhost.
+Local Action: Implement the <head> script updates in your index.html (Vite) and verify the painting performance in Chrome's "Performance" tab.
 
 ### Phase 2: Backend RAG Implementation
 - [ ] **Initialize Python Environment:** Set up `poetry` or `venv` with FastAPI dependencies.
