@@ -52,13 +52,12 @@ This project specifically targets the **UI Styling Specialist** competencies:
     * Installed `storybook-addon-a11y` to visualize WCAG compliance in real-time.
     * Installed `vitest-axe` and implemented a unit test that asserts `expect(container).toHaveNoViolations()` for the `CmmTranscriptCard`.
 * **Semantic Token "Aliasing" (DesignOps):** Refactor `src/tokens` to use a 3-tier structure (Base -> Semantic -> Component). Update Style Dictionary to resolve aliases (e.g., `button.primary.bg` -> `color.action.blue` -> `#005ea2`).
+* **High-Performance Virtualization:** Implement `@tanstack/react-virtual` for the Transcript Viewer to render large datasets without DOM performance degradation. Aim for TTI < 2s.
 
 ## 5. Roadmap & Next Steps
 
-### Phase 1: Advanced UI & DesignOps (GDIT Skill Gap Closure)
-* [ ] **High-Performance Virtualization:** Implement `@tanstack/react-virtual` for the Transcript Viewer to render large datasets without DOM performance degradation. Aim for TTI < 2s.
 
-#### Phase 1.5: Further Study and GDIT Skills Gap Closure
+#### Phase 1.5: Further Study and GDIT Skills Study
 * [ ] **DevSecOps Containerization (DevContainers)II
 Why: This is specifically designed for local environments. By setting up .devcontainer, you prove you can enforce a standard environment for any developer who clones your repo, mirroring how federal teams standardize onboarding.
 Local Action: Install Docker Desktop and the "Dev Containers" extension in VS Code. Create the config to lock your Node version and extensions.

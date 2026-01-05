@@ -13,6 +13,7 @@
     "build-storybook": "storybook build"
   },
   "dependencies": {
+    "@tanstack/react-virtual": "^3.13.16",
     "@trussworks/react-uswds": "^11.0.0",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",

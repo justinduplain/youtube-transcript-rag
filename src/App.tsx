@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Routes, Route, Link } from 'react-router-dom';
 import { UrlIngestionForm } from './components/forms/UrlIngestionForm';
 import { TestTranscriptCardPage } from './pages/TestTranscriptCardPage';
+import { VirtualTranscriptPage } from './pages/VirtualTranscriptPage';
 
 function App() {
   const [loading, setLoading] = useState(false);
@@ -41,6 +42,11 @@ function App() {
                     <span>Transcript Test</span>
                   </Link>
                 </li>
+                <li className="usa-nav__primary-item">
+                  <Link className="usa-nav__link" to="/virtual-transcript">
+                    <span>Virtual Scroll</span>
+                  </Link>
+                </li>
               </ul>
             </nav>
           </div>
@@ -67,6 +73,10 @@ function App() {
         <Route 
           path="/transcript" 
           element={<TestTranscriptCardPage />} 
+        />
+        <Route 
+          path="/virtual-transcript" 
+          element={<VirtualTranscriptPage />} 
         />
       </Routes>
     </div>

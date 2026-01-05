@@ -13,11 +13,26 @@ This project serves a dual purpose as both a functional web application and an e
 
 -   **Accessible Components:** All custom components (prefixed with `Cmm`) are built by composing primitives from the `@trussworks/react-uswds` library, ensuring they are accessible (Section 508 compliant) by default.
 
+-   **Automated Accessibility Pipeline:** To enforce the "Zero Trust" approach to Section 508 compliance, the project integrates `storybook-addon-a11y` for real-time compliance visualization during development and `vitest-axe` for automated unit testing, ensuring components remain violation-free.
+
+-   **High-Performance Virtualization:** For large datasets (like 10,000+ transcript segments), the project implements `@tanstack/react-virtual`. This ensures high performance and a Time to Interactive (TTI) of under 2 seconds by only rendering the elements currently visible in the viewport.
+
+## Current Component Library
+
+The following components demonstrate the application of the design system:
+
+-   **`CmmButton`**: Multi-variant button wrapper overriding USWDS defaults via design tokens.
+-   **`CmmUrlInput`**: Accessible form group for URL ingestion.
+-   **`CmmTranscriptCard`**: High-density data display component utilizing specific typography tokens (`Inter`, `Merriweather`).
+-   **`VirtualTranscriptList`**: A high-performance list component that utilizes virtualization to handle massive datasets.
+-   **`TestTranscriptCardPage`**: Demonstrates accessible, URL-driven pagination for list displays.
+
 ## Tech Stack
 
--   **Frontend:** React, TypeScript, React Router DOM
+-   **Frontend:** React 19, TypeScript, React Router DOM 7
 -   **Build Tool:** Vite
 -   **Component Development:** Storybook
+-   **Performance:** `@tanstack/react-virtual`
 -   **Styling:**
     -   **Base System:** USWDS (`@trussworks/react-uswds`)
     -   **Utility Classes:** Tailwind CSS
@@ -28,23 +43,11 @@ This project serves a dual purpose as both a functional web application and an e
     -   **Accessibility:** vitest-axe, storybook-addon-a11y
 
 ## Setup Instructions
--   **Automated Accessibility Pipeline:** To enforce the "Zero Trust" approach to Section 508 compliance, the project integrates `storybook-addon-a11y` for real-time compliance visualization during development and `vitest-axe` for automated unit testing, ensuring components remain violation-free.
-
-## Current Component Library
-
-The following components demonstrate the application of the design system:
-
--   **`CmmButton`**: Multi-variant button wrapper overriding USWDS defaults via design tokens.
--   **`CmmUrlInput`**: Accessible form group for URL ingestion.
--   **`CmmTranscriptCard`**: High-density data display component utilizing specific typography tokens (`Inter`, `Merriweather`).
--   **`TestTranscriptCardPage`**: Demonstrates accessible, URL-driven pagination for list displays.
-
-## Tech Stack
 
 ### Prerequisites
 
 -   Node.js (LTS version recommended)
--   npm (Node Package Manager) or Yarn
+-   npm (Node Package Manager)
 
 ### Installation
 
@@ -56,33 +59,15 @@ The following components demonstrate the application of the design system:
 2.  Install the dependencies:
     ```bash
     npm install
-    # or
-    yarn install
     ```
 
 ### Running the Development Server
 
-To start the development server with hot-reloading:
+To start the development server:
 
 ```bash
 npm run dev
-# or
-yarn dev
 ```
-
-Open [http://localhost:5173](http://localhost:5173) (or the port indicated in your console) in your browser to view the application.
-
-### Building for Production
-
-To build the project for production:
-
-```bash
-npm run build
-# or
-yarn build
-```
-
-This will compile and optimize your application into the `dist` directory.
 
 ### Storybook
 
@@ -90,8 +75,4 @@ To run Storybook and browse the component library:
 
 ```bash
 npm run storybook
-# or
-yarn storybook
 ```
-
-Open [http://localhost:6006](http://localhost:6006) (or the port indicated in your console) in your browser.
