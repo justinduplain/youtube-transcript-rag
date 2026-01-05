@@ -23,8 +23,23 @@ This project serves a dual purpose as both a functional web application and an e
     -   **Utility Classes:** Tailwind CSS
     -   **Design Tokens:** Style Dictionary
     -   **Architecture:** CSS Cascade Layers
+-   **Testing:**
+    -   **Unit/Integration:** Vitest, React Testing Library
+    -   **Accessibility:** vitest-axe, storybook-addon-a11y
 
 ## Setup Instructions
+-   **Automated Accessibility Pipeline:** To enforce the "Zero Trust" approach to Section 508 compliance, the project integrates `storybook-addon-a11y` for real-time compliance visualization during development and `vitest-axe` for automated unit testing, ensuring components remain violation-free.
+
+## Current Component Library
+
+The following components demonstrate the application of the design system:
+
+-   **`CmmButton`**: Multi-variant button wrapper overriding USWDS defaults via design tokens.
+-   **`CmmUrlInput`**: Accessible form group for URL ingestion.
+-   **`CmmTranscriptCard`**: High-density data display component utilizing specific typography tokens (`Inter`, `Merriweather`).
+-   **`TestTranscriptCardPage`**: Demonstrates accessible, URL-driven pagination for list displays.
+
+## Tech Stack
 
 ### Prerequisites
 
