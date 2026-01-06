@@ -56,24 +56,6 @@ This project specifically targets the **UI Styling Specialist** competencies:
 
 ## 5. Roadmap & Next Steps
 
-
-#### Phase 1.5: Further Study and GDIT Skills Study
-* [ ] **DevSecOps Containerization (DevContainers)II
-Why: This is specifically designed for local environments. By setting up .devcontainer, you prove you can enforce a standard environment for any developer who clones your repo, mirroring how federal teams standardize onboarding.
-Local Action: Install Docker Desktop and the "Dev Containers" extension in VS Code. Create the config to lock your Node version and extensions.
-
-* [ ] **Federal Accessibility Standards (Trusted Tester V5 + VPAT)**
-Why: This is a manual auditing process. It requires no infrastructure, just your browser and a spreadsheet (the VPAT).
-Local Action: Install the "ANDI" (Accessible Name & Description Inspector) browser bookmarklet (the modern alternative to WAT) and fill out a mock VPAT for your CmmTranscriptCard.
-
-* [ ] **Design System Governance & Versioning**
-Why: This operates entirely within Git. You don't need a remote CI server to manage versioning.
-Local Action: Install @changesets/cli. Run npx changeset locally after making a CSS change to see how it generates a changelog entry.
-
-* [ ] **SSR Hydration & Performance**
-Why: This is pure code. You can test "Flash of Unstyled Content" (FOUC) by throttling your network speed in Chrome DevTools to "Slow 3G" running on localhost.
-Local Action: Implement the <head> script updates in your index.html (Vite) and verify the painting performance in Chrome's "Performance" tab.
-
 ### Phase 2: Backend RAG Implementation
 - [ ] **Initialize Python Environment:** Set up `poetry` or `venv` with FastAPI dependencies.
 - [ ] **Ingestion Endpoint:** Create `POST /ingest` to accept a URL and return a job ID.
@@ -98,6 +80,23 @@ Channel Ingestion: Implement a crawler to fetch all (or a subset of) videos from
 Temporal Filtering: Add time-window controls (e.g., "Ingest videos published between Jan 2023 and Dec 2023") to refine the context.
 
 Cross-Reference Synthesis: Enable the RAG engine to draw connections and contrast information across multiple videos, providing deeper context and comprehensive topic coverage.
+
+#### TBD Phase 5: Further Study and GDIT Skills Study (TBD - Low Priority now that my interview is over)
+* [ ] **DevSecOps Containerization (DevContainers)II
+Why: This is specifically designed for local environments. By setting up .devcontainer, you prove you can enforce a standard environment for any developer who clones your repo, mirroring how federal teams standardize onboarding.
+Local Action: Install Docker Desktop and the "Dev Containers" extension in VS Code. Create the config to lock your Node version and extensions.
+
+* [ ] **Federal Accessibility Standards (Trusted Tester V5 + VPAT)**
+Why: This is a manual auditing process. It requires no infrastructure, just your browser and a spreadsheet (the VPAT).
+Local Action: Install the "ANDI" (Accessible Name & Description Inspector) browser bookmarklet (the modern alternative to WAT) and fill out a mock VPAT for your CmmTranscriptCard.
+
+* [ ] **Design System Governance & Versioning**
+Why: This operates entirely within Git. You don't need a remote CI server to manage versioning.
+Local Action: Install @changesets/cli. Run npx changeset locally after making a CSS change to see how it generates a changelog entry.
+
+* [ ] **SSR Hydration & Performance**
+Why: This is pure code. You can test "Flash of Unstyled Content" (FOUC) by throttling your network speed in Chrome DevTools to "Slow 3G" running on localhost.
+Local Action: Implement the <head> script updates in your index.html (Vite) and verify the painting performance in Chrome's "Performance" tab.
 
 ## Custom Instructions
 Keep these instrucitons in mind when performing tasks: 
