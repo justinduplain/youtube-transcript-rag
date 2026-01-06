@@ -11,21 +11,22 @@ This project serves a dual purpose:
 
 ## 2. Technical Architecture
 
-### Frontend (The CMM Sandbox)
-* **Framework:** React 18 + Vite (Matching CMM's "ReactJS" requirement).
-* **Styling Engine:** Tailwind CSS (Utility-first) + CSS Modules (Legacy support).
-* **Design System:**
-    * **Base:** USWDS (United States Web Design System) via `@trussworks/react-uswds`.
-    * **Tokens:** Style Dictionary (v4) managing "Single Source of Truth" for brand colors, typography, and spacing.
-    * **Architecture:** "Sandwich Strategy" using CSS Layers (`@layer base, uswds, cmm, utilities`) to manage specificity between USWDS defaults and Tailwind overrides.
-* **Language:** TypeScript (Strict Mode).
+### **Frontend (`/frontend`)**
+* **Stack:** React 18 + Vite + TypeScript.
+* **Design System:** USWDS (Federal Style) via `@trussworks/react-uswds` + Tailwind CSS.
+* **Architecture:** * **Tokens:** Style Dictionary (v4) for centralized styling variables.
+    * **Layering:** "Sandwich Strategy" (Base < USWDS < CMM < Utilities) in `index.css`.
+* **Key Components:** `IngestionForm` (Data Entry), `CmmTranscriptCard` (Data Display), `TranscriptViewer` (Interactive list).
 
-### Backend (The RAG Engine)
-* *Note: While CMM uses NodeJS for frontend serving, this RAG pipeline uses Python to leverage the AI/ML ecosystem.*
-* **API:** FastAPI (Python 3.12+).
-* **Vector Database:** ChromaDB or Pinecone.
-* **LLM Integration:** LangChain / LlamaIndex.
-* **Transcription:** YouTube Transcript API.
+### **Backend (`/backend`)**
+* **Framework:** FastAPI (Python 3.12+).
+* **Core Libraries:**
+    * `youtube-transcript-api`: For extracting subtitles/timestamps.
+    * `langchain` / `llama-index`: For orchestration.
+    * `chromadb` (Local) or `pinecone` (Cloud): Vector Store.
+    * `openai` or `ollama`: LLM Inference.
+* **Data Model:** * **Document:** Full transcript.
+    * **Chunk:** ~500-1000 character segment containing `text`, `start_time`, `end_time`, and `video_id` metadata.
 
 ## 3. CMM Role Alignment & Learning Objectives
 This project specifically targets the **UI Styling Specialist** competencies:
@@ -37,11 +38,7 @@ This project specifically targets the **UI Styling Specialist** competencies:
 
 ## 4. Current State (Frontend)
 * **Token Pipeline:** Functional. `sd.config.js` generates CSS variables and a flat JSON file for Tailwind.
-* **Component Library:**
-    * `CmmButton`: A multi-variant wrapper around USWDS Button (Primary/Gold) demonstrating brand-specific overrides implemented via custom CSS rules within the `cmm` layer, leveraging cascade layer precedence.
-    * `CmmUrlInput`: A 508-compliant form group for data ingestion.
-    * `CmmTranscriptCard`: A high-density data display component for transcript segments, utilizing typography tokens.
-    * `TestTranscriptCardPage`: A paginated display of `CmmTranscriptCard` components, showcasing URL-driven navigation and accessible pagination controls.
+* **UI Components:** `CmmButton` (Gold/Primary variants), `CmmUrlInput` (Accessible Forms), `CmmTranscriptCard` (High-density display).
 * **Routing:** Client-side routing implemented with `react-router-dom` for multi-page navigation.
 * **Pagination:** Accessible, URL-driven pagination system integrated for list displays.
 * **Storybook Documentation:** Comprehensive descriptions added to all existing Storybook stories for better context and understanding.
@@ -56,32 +53,21 @@ This project specifically targets the **UI Styling Specialist** competencies:
 
 ## 5. Roadmap & Next Steps
 
-### Phase 2: Backend RAG Implementation
-- [ ] **Initialize Python Environment:** Set up `poetry` or `venv` with FastAPI dependencies.
-- [ ] **Ingestion Endpoint:** Create `POST /ingest` to accept a URL and return a job ID.
-- [ ] **Transcript Service:** Implement the logic to fetch and clean YouTube subtitles.
-- [ ] **Vector Store Connection:** Set up the embedding model and database connection.
+### **Phase 2: Backend Foundation (Immediate Priority)**
+* [ ] **Repo Restructure:** Move current React files into a `frontend/` folder and initialize a `backend/` folder for Python.
+* [ ] **FastAPI Setup:** Initialize `poetry` or `venv`. Create `main.py` with a health check endpoint.
+* [ ] **Transcript Service:** Implement `YouTubeLoader` to fetch transcripts *with timestamps*.
+* [ ] **Smart Chunking:** Implement a chunking strategy that preserves time metadata (critical for the Deep Link feature).
+* [ ] **Vector Store:** Setup ChromaDB (local) to store embeddings.
 
-### Phase 3: Integration & State Management
-- [ ] **Deep Link State Optimization:** Create a custom `useTranscriptSync` hook to manage focus between the video player and transcript list without causing full-list re-renders (using `React.memo`).
-- [ ] **Connect Frontend/Backend:** Link React `IngestionForm` to FastAPI endpoints.
-- [ ] **Streaming Chat Interface:** Build the chat UI for RAG results.
+### **Phase 3: The "Chat" Loop**
+* [ ] **Ingestion Endpoint:** `POST /api/ingest` -> Accepts URL, returns Job ID + Status.
+* [ ] **Query Endpoint:** `POST /api/chat` -> Accepts user question, performs similarity search, returns Answer + Source Chunks (with timestamps).
+* [ ] **Frontend Integration:** Connect `IngestionForm` to the backend. Create the `ChatInterface` component.
 
-### Phase 4: Multi-Video & Channel-Level Intelligence
-
-Objective: Move beyond single-video analysis to enable broad, channel-wide synthesis and comparative research.
-
-Key Capabilities:
-
-Multi-Video Selection: Allow users to select and ingest multiple distinct videos simultaneously to create a composite knowledge base.
-
-Channel Ingestion: Implement a crawler to fetch all (or a subset of) videos from a specific YouTube channel URL.
-
-Temporal Filtering: Add time-window controls (e.g., "Ingest videos published between Jan 2023 and Dec 2023") to refine the context.
-
-Cross-Reference Synthesis: Enable the RAG engine to draw connections and contrast information across multiple videos, providing deeper context and comprehensive topic coverage.
-
-#### TBD Phase 5: Further Study and GDIT Skills Study (TBD - Low Priority now that my interview is over)
+### **Phase 4: Multi-Video Intelligence**
+* **Multi-Video/Playlist Selection:** Allows logged-in YouTube user to select a playlist; the RAG provides context based on the full set.
+#### TBD Phase 5: Hardenting and GDIT Skills Study (Low Priority)
 * [ ] **DevSecOps Containerization (DevContainers)II
 Why: This is specifically designed for local environments. By setting up .devcontainer, you prove you can enforce a standard environment for any developer who clones your repo, mirroring how federal teams standardize onboarding.
 Local Action: Install Docker Desktop and the "Dev Containers" extension in VS Code. Create the config to lock your Node version and extensions.
