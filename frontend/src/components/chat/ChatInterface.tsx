@@ -17,15 +17,20 @@ export const ChatInterface: React.FC = () => {
     if (!input.trim()) return;
 
     const userMsg: Message = { role: 'user', content: input };
-    setMessages(prev => [...prev, userMsg]);
+    const newHistory = [...messages, userMsg]; // Current history + new message
+    setMessages(newHistory);
     setInput('');
     setIsLoading(true);
 
     try {
+      // Send message AND history to backend
       const response = await fetch('http://localhost:8000/api/v1/chat', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ message: input }),
+        body: JSON.stringify({ 
+          message: input,
+          history: messages // Send previous messages as context
+        }),
       });
 
       const data = await response.json();

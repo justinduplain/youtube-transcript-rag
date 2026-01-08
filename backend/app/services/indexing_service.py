@@ -30,9 +30,11 @@ class IndexingService:
         Parses transcript into hierarchical nodes (Parent-Child).
         """
         # Combine transcript into a single document with metadata
+        # Embed timestamps directly in the text: "[start_seconds] text..."
         full_text = ""
         for entry in transcript:
-            full_text += f"{entry['text']} "
+            start_time = int(entry['start'])
+            full_text += f"[{start_time}] {entry['text']} "
             
         doc = Document(
             text=full_text,

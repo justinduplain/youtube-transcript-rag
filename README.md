@@ -1,78 +1,77 @@
 # YouTube Transcript RAG Pipeline
 
-This project serves a dual purpose as both a functional web application and an educational sandbox for building a modern federal design system.
+A Retrieval-Augmented Generation (RAG) system that allows you to "chat" with YouTube videos. It ingests transcripts, indexes them using a Hybrid Search (Vector + BM25) architecture, and provides answers with **time-referenced deep links** to the source video.
 
-1.  **Functional:** A Retrieval-Augmented Generation (RAG) pipeline for YouTube video transcripts. Users can ingest YouTube video URLs, which are then processed for transcript extraction and embedding generation.
-2.  **Educational:** A "Zero Trust" Federal Design System sandbox that mirrors the requirements of the Case Management Modernization (CMM) program. It focuses on USWDS compliance, a Design Token pipeline with Style Dictionary, and advanced CSS architecture.
+## 🌟 Key Features
 
-## Key Architectural Concepts
+*   **Playlist Ingestion:** Automatically handles single videos or full playlists.
+*   **Hybrid Search:** Combines Vector Search (ChromaDB) and Keyword Search (BM25) for high precision.
+*   **Time-Referenced Deep Links:** Citations link directly to the exact second in the video (e.g., `[04:23]`).
+*   **Zero-Trust UI:** Built with USWDS and Tailwind CSS for accessibility and standard compliance.
+*   **Chat History:** Context-aware conversations.
 
--   **Design Token Pipeline:** The project uses **Style Dictionary** to manage design tokens (e.g., colors, fonts, spacing) as a "Single Source of Truth." These tokens, defined in `src/tokens/**/*.json`, are automatically compiled into CSS variables and JavaScript objects, ensuring a consistent and maintainable visual identity.
+## 🛠️ Architecture
 
--   **CSS "Sandwich" Layering:** To integrate the USWDS design system with Tailwind CSS utility classes, the application uses an explicit CSS layer ordering (`@layer base, uswds, cmm, utilities`). This strategy ensures that CMM's custom component styles can override USWDS defaults, and that Tailwind utilities can override everything for fine-grained adjustments, preventing specificity conflicts.
+*   **Frontend:** React 18, Vite, TypeScript, USWDS, Tailwind CSS.
+*   **Backend:** FastAPI, Python 3.12, Poetry.
+*   **AI/RAG:** LlamaIndex, OpenAI (`gpt-4o-mini`), ChromaDB (Local Vector Store).
 
--   **Accessible Components:** All custom components (prefixed with `Cmm`) are built by composing primitives from the `@trussworks/react-uswds` library, ensuring they are accessible (Section 508 compliant) by default.
-
--   **Automated Accessibility Pipeline:** To enforce the "Zero Trust" approach to Section 508 compliance, the project integrates `storybook-addon-a11y` for real-time compliance visualization during development and `vitest-axe` for automated unit testing, ensuring components remain violation-free.
-
--   **High-Performance Virtualization:** For large datasets (like 10,000+ transcript segments), the project implements `@tanstack/react-virtual`. This ensures high performance and a Time to Interactive (TTI) of under 2 seconds by only rendering the elements currently visible in the viewport.
-
-## Current Component Library
-
-The following components demonstrate the application of the design system:
-
--   **`CmmButton`**: Multi-variant button wrapper overriding USWDS defaults via design tokens.
--   **`CmmUrlInput`**: Accessible form group for URL ingestion.
--   **`CmmTranscriptCard`**: High-density data display component utilizing specific typography tokens (`Inter`, `Merriweather`).
--   **`VirtualTranscriptList`**: A high-performance list component that utilizes virtualization to handle massive datasets.
--   **`TestTranscriptCardPage`**: Demonstrates accessible, URL-driven pagination for list displays.
-
-## Tech Stack
-
--   **Frontend:** React 19, TypeScript, React Router DOM 7
--   **Build Tool:** Vite
--   **Component Development:** Storybook
--   **Performance:** `@tanstack/react-virtual`
--   **Styling:**
-    -   **Base System:** USWDS (`@trussworks/react-uswds`)
-    -   **Utility Classes:** Tailwind CSS
-    -   **Design Tokens:** Style Dictionary
-    -   **Architecture:** CSS Cascade Layers
--   **Testing:**
-    -   **Unit/Integration:** Vitest, React Testing Library
-    -   **Accessibility:** vitest-axe, storybook-addon-a11y
-
-## Setup Instructions
+## 🚀 Getting Started
 
 ### Prerequisites
+*   Node.js (v18+)
+*   Python 3.12+ (managed via Poetry)
+*   OpenAI API Key
 
--   Node.js (LTS version recommended)
--   npm (Node Package Manager)
-
-### Installation
-
-1.  Clone the repository:
-    ```bash
-    git clone https://github.com/your-username/youtube-transcript-rag.git
-    cd youtube-transcript-rag
-    ```
-2.  Install the dependencies:
-    ```bash
-    npm install
-    ```
-
-### Running the Development Server
-
-To start the development server:
-
+### 1. Setup Backend
 ```bash
+cd backend
+
+# Install dependencies
+curl -sSL https://install.python-poetry.org | python3 -
+poetry install
+
+# Configure Environment
+# Create a .env file with your API keys
+echo "OPENAI_API_KEY=sk-..." > .env
+# (Optional) For private playlists, export cookies.txt to backend/cookies.txt
+# OR set YOUTUBE_SOURCE_BROWSER=chrome in .env
+
+# Run Server
+poetry run uvicorn app.main:app --reload
+```
+
+### 2. Setup Frontend
+```bash
+cd frontend
+
+# Install dependencies
+npm install
+
+# Run Development Server
 npm run dev
 ```
 
-### Storybook
+### 3. Usage
+1.  Open `http://localhost:5173`.
+2.  Paste a YouTube URL (Video or Playlist) into the Ingestion Form.
+3.  Wait for the alert confirming ingestion started.
+4.  Navigate to the **Chat** page.
+5.  Ask questions! Click the timestamps in "Sources" to verify the answer.
 
-To run Storybook and browse the component library:
+## 🧪 Testing
+
+The backend includes a `pytest` suite for the RAG pipeline.
 
 ```bash
-npm run storybook
+cd backend
+poetry run pytest
 ```
+
+## 📂 Project Structure
+
+*   `frontend/`: React application.
+*   `backend/`: FastAPI application.
+    *   `app/services/`: Core logic (Ingestion, Indexing, Retrieval).
+    *   `app/api/`: REST Endpoints.
+    *   `chroma_db/`: Local vector database (git-ignored).

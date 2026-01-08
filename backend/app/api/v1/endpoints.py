@@ -5,6 +5,8 @@ from app.services.yt_dlp_service import YtDlpService
 from app.services.transcript_service import TranscriptService
 from app.services.indexing_service import IndexingService
 from app.services.retrieval_service import RetrievalService
+from llama_index.core.base.llms.types import ChatMessage, MessageRole
+import re
 import os
 
 router = APIRouter()
@@ -18,8 +20,13 @@ retrieval_service = RetrievalService(indexing_service)
 class IngestRequest(BaseModel):
     url: str
 
+class Message(BaseModel):
+    role: str
+    content: str
+
 class ChatRequest(BaseModel):
     message: str
+    history: List[Message] = []
 
 @router.post("/ingest")
 async def ingest_url(request: IngestRequest, background_tasks: BackgroundTasks):
@@ -33,14 +40,49 @@ async def ingest_url(request: IngestRequest, background_tasks: BackgroundTasks):
     
     # Define background task
     def process_videos(ids: List[str]):
-        for vid in ids:
+        total = len(ids)
+        print(f"🚀 Starting batch ingestion for {total} videos: {ids}")
+        
+        for i, vid in enumerate(ids, 1):
+            print(f"--- Processing [{i}/{total}]: {vid} ---")
             try:
-                metadata = yt_service.get_video_metadata(vid)
-                transcript = transcript_service.get_transcript(vid)
+                # 1. Fetch Metadata
+                try:
+                    raw_metadata = yt_service.get_video_metadata(vid)
+                    # Filter metadata to keep it small for vector storage
+                    metadata = {
+                        "video_id": raw_metadata.get("id"),
+                        "title": raw_metadata.get("title"),
+                        "uploader": raw_metadata.get("uploader"),
+                        "upload_date": raw_metadata.get("upload_date"),
+                        "view_count": raw_metadata.get("view_count"),
+                        "url": raw_metadata.get("webpage_url") or f"https://www.youtube.com/watch?v={vid}"
+                    }
+                except Exception as e:
+                    print(f"⚠️ Failed to fetch metadata for {vid}: {e}")
+                    metadata = {} # Continue with minimal metadata
+
+                # 2. Fetch Transcript
+                try:
+                    transcript = transcript_service.get_transcript(vid)
+                except Exception as e:
+                    print(f"⚠️ Failed to fetch transcript for {vid}: {e}")
+                    transcript = []
+
+                # 3. Index (only if transcript exists)
                 if transcript:
+                    print(f"Indexing {len(transcript)} transcript segments...")
                     indexing_service.ingest_transcript(vid, transcript, metadata)
+                    print(f"✅ Successfully ingested: {vid}")
+                else:
+                    print(f"⏭️ Skipping {vid}: No transcript available.")
+
             except Exception as e:
-                print(f"Failed to process video {vid}: {e}")
+                # Catch-all for unexpected crashes in the indexing step
+                print(f"❌ Critical error processing {vid}: {e}")
+                continue # Explicitly continue to next video
+        
+        print(f"🏁 Batch ingestion complete.")
 
     background_tasks.add_task(process_videos, video_ids)
     
@@ -52,20 +94,42 @@ async def ingest_url(request: IngestRequest, background_tasks: BackgroundTasks):
 @router.post("/chat")
 async def chat(request: ChatRequest):
     """
-    Queries the indexed transcripts.
+    Queries the indexed transcripts with conversation context.
     """
     try:
-        response = retrieval_service.query(request.message)
+        # Convert Pydantic messages to LlamaIndex ChatMessages
+        chat_history = [
+            ChatMessage(role=MessageRole.USER if m.role == 'user' else MessageRole.ASSISTANT, content=m.content)
+            for m in request.history
+        ]
         
-        # Format sources for frontend
+        chat_engine = retrieval_service.get_chat_engine()
+        response = chat_engine.chat(request.message, chat_history=chat_history)
+        
+        # Format sources for frontend with Timestamp extraction
         sources = []
         for node in response.source_nodes:
             metadata = node.node.metadata
+            content = node.node.get_content()
+            
+            # Extract timestamp from content: "[123] text..."
+            timestamp_match = re.search(r'\[(\d+)\]', content)
+            timestamp_sec = int(timestamp_match.group(1)) if timestamp_match else 0
+            
+            # Format nicely [MM:SS]
+            minutes = timestamp_sec // 60
+            seconds = timestamp_sec % 60
+            timestamp_label = f"[{minutes:02d}:{seconds:02d}]"
+            
+            # Append &t={sec} to URL
+            base_url = metadata.get("url", "")
+            deep_link = f"{base_url}&t={timestamp_sec}" if base_url else ""
+
             sources.append({
-                "text": node.node.get_content(),
+                "text": content,
                 "video_id": metadata.get("video_id"),
-                "title": metadata.get("title"),
-                "url": metadata.get("url"),
+                "title": f"{timestamp_label} {metadata.get('title')}",
+                "url": deep_link,
                 "score": node.score
             })
 

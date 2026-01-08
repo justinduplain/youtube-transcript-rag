@@ -96,12 +96,20 @@ This project specifically targets the **UI Styling Specialist** competencies:
 * [x] **Fusion Layer:** Implement `QueryFusionRetriever` wrapping both retrievers with `mode="reciprocal_rerank"`.
 * [x] **Context Resolution:** Implement the `RecursiveRetriever` logic to ensure that when a Child Node is found, the *Parent Node* is what gets returned to the LLM.
 
-### **Phase 3: The "Chat" Loop (In Progress)**
+### **Phase 3: The "Chat" Loop (Completed)**
 * [x] **Ingestion Endpoint:** `POST /api/ingest` -> Accepts URL (Video or Playlist), returns Job ID + Status.
 * [x] **Query Endpoint:** `POST /api/chat` -> Accepts user question, performs Hybrid/RRF search, returns Answer + Source Chunks (with timestamps).
 * [x] **Frontend Integration:** Connect `IngestionForm` to the backend. Create the `ChatInterface` component.
+* [x] **Deep Linking:** Implemented timestamp embedding `[123]` in transcripts and frontend logic to render `&t=123` links.
+* [x] **Chat History:** Implemented `ContextChatEngine` to handle multi-turn conversations.
 
-### **Phase 4: Advanced Synthesis & Intelligence**
+### **Phase 3.5: UI/UX Refinement (Current Focus)**
+* [ ] **SPA Consolidation:** Merge Ingestion and Chat into a single dashboard view to reduce navigation friction.
+* [ ] **Ingestion Feedback:** Implement a real-time status indicator or progress notifications to inform users when transcripts are ready for chatting.
+* [ ] **Chat Polish:** Enhance the chat interface with better message formatting and refined citation styling.
+* [ ] **Interactive Citations:** Ensure citation links are visually distinct and provide a smooth hand-off to YouTube.
+
+### **Phase 4: Advanced Synthesis & Intelligence (Next Steps)**
 * **Cross-Video Synthesis:** Enable the RAG engine to draw connections and contrast information across multiple videos (e.g., "Summarize the evolution of this topic across the entire playlist").
 * **Advanced Filtering:** For example, allow the user to select only certain videos from the playlist.
 * **Knowledge Augmentation or comparison:** Allow the user to upload a set of external documents to augment or compare/contrast the information in the transcripts.

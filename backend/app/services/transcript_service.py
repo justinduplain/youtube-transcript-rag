@@ -2,16 +2,30 @@ from youtube_transcript_api import YouTubeTranscriptApi
 from typing import List, Dict, Optional
 
 class TranscriptService:
+    def __init__(self):
+        # Initialize the API client once
+        self.api = YouTubeTranscriptApi()
+
     def get_transcript(self, video_id: str, languages: List[str] = ['en']) -> List[Dict]:
         """
         Fetches the transcript for a given video ID.
         Returns a list of dicts with 'text', 'start', and 'duration'.
         """
         try:
-            return YouTubeTranscriptApi.get_transcript(video_id, languages=languages)
+            # Use the instance method 'fetch' which returns the transcript list directly
+            transcript_list = self.api.fetch(video_id, languages=languages)
+            
+            # Convert FetchedTranscriptSnippet objects to dictionaries
+            return [
+                {
+                    'text': item.text,
+                    'start': item.start,
+                    'duration': item.duration
+                }
+                for item in transcript_list
+            ]
         except Exception as e:
             print(f"Error fetching transcript for {video_id}: {e}")
-            # Try to fetch list of available transcripts to be more specific?
             return []
 
     def format_transcript_for_rag(self, transcript: List[Dict]) -> str:
