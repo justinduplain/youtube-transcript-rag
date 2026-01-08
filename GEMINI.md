@@ -61,46 +61,45 @@ This project specifically targets the **UI Styling Specialist** competencies:
 
 ## 5. Roadmap & Next Steps
 
-### **Phase 2: Backend Core & Advanced Retrieval (Immediate Priority)**
+### **Phase 2: Backend Core & Advanced Retrieval (Completed)**
 
 **1. Repository & Environment Foundation**
 
-* [ ] **Repo Restructure:** Move current React files into `frontend/` and initialize `backend/`.
-* [ ] **Python Environment:** Initialize `poetry` with Python 3.12+.
-* [ ] **Dependency Management:** Install core deps (`fastapi`, `uvicorn`, `llama-index`, `yt-dlp`, `chromadb`).
+* [x] **Repo Restructure:** Move current React files into `frontend/` and initialize `backend/`.
+* [x] **Python Environment:** Initialize `poetry` with Python 3.12+.
+* [x] **Dependency Management:** Install core deps (`fastapi`, `uvicorn`, `llama-index`, `yt-dlp`, `chromadb`).
 
 **2. FastAPI Application Skeleton**
 
-* [ ] **App Factory:** Create `app/main.py` with an application factory pattern for modularity.
-* [ ] **Router Config:** Set up `app/api/v1/` structure for future versioning.
-* [ ] **Health Check:** Implement `GET /health` endpoint to verify service status.
+* [x] **App Factory:** Create `app/main.py` with an application factory pattern for modularity.
+* [x] **Router Config:** Set up `app/api/v1/` structure for future versioning.
+* [x] **Health Check:** Implement `GET /health` endpoint to verify service status.
 
 **3. Video Acquisition Service (The "Loader" Layer)**
 
-* [ ] **Cookie Management:** Implement a secure loader to read `cookies.txt` (via env path) for `yt-dlp` authentication (Critical for private playlists).
-* [ ] **Playlist Resolver:** Create `YtDlpService` to handle `extract_flat` logic, converting Playlist/Channel URLs into a list of video IDs.
-* [ ] **Transcript Fetcher:** Create `TranscriptService` to wrap `youtube-transcript-api` and standardize the output format (text + timestamps).
+* [x] **Cookie Management:** Implement a secure loader to read `cookies.txt` (via env path) for `yt-dlp` authentication (Critical for private playlists).
+* [x] **Playlist Resolver:** Create `YtDlpService` to handle `extract_flat` logic, converting Playlist/Channel URLs into a list of video IDs.
+* [x] **Transcript Fetcher:** Create `TranscriptService` to wrap `youtube-transcript-api` and standardize the output format (text + timestamps).
 
 **4. Advanced Indexing Pipeline (Parent-Child Architecture)**
 
-* [ ] **Node Parsing Strategy:** Configure `HierarchicalNodeParser` with specific chunk sizes (e.g., Parent: 512, Child: 128) to create the relational link.
-* [ ] **Dual-Storage Setup:**
+* [x] **Node Parsing Strategy:** Configure `HierarchicalNodeParser` with specific chunk sizes (e.g., Parent: 512, Child: 128) to create the relational link.
+* [x] **Dual-Storage Setup:**
 * **DocStore:** Initialize `SimpleDocumentStore` (or MongoDB later) to hold the large *Parent Nodes*.
 * **VectorStore:** Initialize `ChromaVectorStore` to hold the searchable *Child Nodes*.
-* [ ] **Batch Ingestion Pipeline:** Create the logic to iterate through a list of Video IDs (from the Playlist Resolver), fetching and indexing each transcript sequentially or in parallel.
-* [ ] Build the logic that accepts a transcript, parses it into Parent/Child nodes, and persists them to their respective stores.
+* [x] **Batch Ingestion Pipeline:** Create the logic to iterate through a list of Video IDs (from the Playlist Resolver), fetching and indexing each transcript sequentially or in parallel.
 
 **5. Hybrid Retrieval Engine Implementation**
 
-* [ ] **Vector Retriever:** Instantiate `VectorIndexRetriever` connected to the ChromaDB index (Targeting Child Nodes).
-* [ ] **Keyword Retriever:** Instantiate `BM25Retriever` connected to the DocStore (Targeting Child Nodes).
-* [ ] **Fusion Layer:** Implement `QueryFusionRetriever` wrapping both retrievers with `mode="reciprocal_rerank"`.
-* [ ] **Context Resolution:** Implement the `RecursiveRetriever` logic to ensure that when a Child Node is found, the *Parent Node* is what gets returned to the LLM.
+* [x] **Vector Retriever:** Instantiate `VectorIndexRetriever` connected to the ChromaDB index (Targeting Child Nodes).
+* [x] **Keyword Retriever:** Instantiate `BM25Retriever` connected to the DocStore (Targeting Child Nodes).
+* [x] **Fusion Layer:** Implement `QueryFusionRetriever` wrapping both retrievers with `mode="reciprocal_rerank"`.
+* [x] **Context Resolution:** Implement the `RecursiveRetriever` logic to ensure that when a Child Node is found, the *Parent Node* is what gets returned to the LLM.
 
-### **Phase 3: The "Chat" Loop**
-* [ ] **Ingestion Endpoint:** `POST /api/ingest` -> Accepts URL (Video or Playlist), returns Job ID + Status.
-* [ ] **Query Endpoint:** `POST /api/chat` -> Accepts user question, performs Hybrid/RRF search, returns Answer + Source Chunks (with timestamps).
-* [ ] **Frontend Integration:** Connect `IngestionForm` to the backend. Create the `ChatInterface` component.
+### **Phase 3: The "Chat" Loop (In Progress)**
+* [x] **Ingestion Endpoint:** `POST /api/ingest` -> Accepts URL (Video or Playlist), returns Job ID + Status.
+* [x] **Query Endpoint:** `POST /api/chat` -> Accepts user question, performs Hybrid/RRF search, returns Answer + Source Chunks (with timestamps).
+* [x] **Frontend Integration:** Connect `IngestionForm` to the backend. Create the `ChatInterface` component.
 
 ### **Phase 4: Advanced Synthesis & Intelligence**
 * **Cross-Video Synthesis:** Enable the RAG engine to draw connections and contrast information across multiple videos (e.g., "Summarize the evolution of this topic across the entire playlist").

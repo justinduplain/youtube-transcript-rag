@@ -3,19 +3,34 @@ import { Routes, Route, Link } from 'react-router-dom';
 import { UrlIngestionForm } from './components/forms/UrlIngestionForm';
 import { TestTranscriptCardPage } from './pages/TestTranscriptCardPage';
 import { VirtualTranscriptPage } from './pages/VirtualTranscriptPage';
+import { ChatPage } from './pages/ChatPage';
 
 function App() {
   const [loading, setLoading] = useState(false);
 
-  const handleIngest = (url: string) => {
+  const handleIngest = async (url: string) => {
     console.log('Ingesting:', url);
     setLoading(true);
     
-    // Simulate API call to Python backend
-    setTimeout(() => {
+    try {
+      const response = await fetch('http://localhost:8000/api/v1/ingest', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ url }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Ingestion failed');
+      }
+
+      const data = await response.json();
+      alert(`Ingestion started for ${data.video_ids.length} videos.`);
+    } catch (error) {
+      console.error('Ingestion error:', error);
+      alert('Failed to start ingestion. Make sure the backend is running.');
+    } finally {
       setLoading(false);
-      alert(`Ingestion started for: ${url}`);
-    }, 2000);
+    }
   };
 
   return (
@@ -35,6 +50,11 @@ function App() {
                 <li className="usa-nav__primary-item">
                   <Link className="usa-nav__link" to="/">
                     <span>Ingestion</span>
+                  </Link>
+                </li>
+                <li className="usa-nav__primary-item">
+                  <Link className="usa-nav__link" to="/chat">
+                    <span>Chat</span>
                   </Link>
                 </li>
                 <li className="usa-nav__primary-item">
@@ -69,6 +89,10 @@ function App() {
               </div>
             </main>
           } 
+        />
+        <Route 
+          path="/chat" 
+          element={<ChatPage />} 
         />
         <Route 
           path="/transcript" 
