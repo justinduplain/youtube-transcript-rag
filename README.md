@@ -1,4 +1,4 @@
-# YouTube Transcript RAG Pipeline & CMM Design System Study
+# YouTube Transcript RAG Pipeline
 
 This project serves a dual purpose as both a functional web application and an educational sandbox for building a modern federal design system.
 
