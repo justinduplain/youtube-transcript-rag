@@ -8,6 +8,9 @@ from app.services.retrieval_service import RetrievalService
 from llama_index.core.base.llms.types import ChatMessage, MessageRole
 import re
 import os
+import logging
+
+logger = logging.getLogger(__name__)
 
 router = APIRouter()
 
@@ -41,10 +44,10 @@ async def ingest_url(request: IngestRequest, background_tasks: BackgroundTasks):
     # Define background task
     def process_videos(ids: List[str]):
         total = len(ids)
-        print(f"🚀 Starting batch ingestion for {total} videos: {ids}")
+        logger.info(f"🚀 Starting batch ingestion for {total} videos: {ids}")
         
         for i, vid in enumerate(ids, 1):
-            print(f"--- Processing [{i}/{total}]: {vid} ---")
+            logger.info(f"--- Processing [{i}/{total}]: {vid} ---")
             try:
                 # 1. Fetch Metadata
                 try:
@@ -59,30 +62,30 @@ async def ingest_url(request: IngestRequest, background_tasks: BackgroundTasks):
                         "url": raw_metadata.get("webpage_url") or f"https://www.youtube.com/watch?v={vid}"
                     }
                 except Exception as e:
-                    print(f"⚠️ Failed to fetch metadata for {vid}: {e}")
+                    logger.warning(f"⚠️ Failed to fetch metadata for {vid}: {e}")
                     metadata = {} # Continue with minimal metadata
 
                 # 2. Fetch Transcript
                 try:
                     transcript = transcript_service.get_transcript(vid)
                 except Exception as e:
-                    print(f"⚠️ Failed to fetch transcript for {vid}: {e}")
+                    logger.warning(f"⚠️ Failed to fetch transcript for {vid}: {e}")
                     transcript = []
 
                 # 3. Index (only if transcript exists)
                 if transcript:
-                    print(f"Indexing {len(transcript)} transcript segments...")
+                    logger.info(f"Indexing {len(transcript)} transcript segments...")
                     indexing_service.ingest_transcript(vid, transcript, metadata)
-                    print(f"✅ Successfully ingested: {vid}")
+                    logger.info(f"✅ Successfully ingested: {vid}")
                 else:
-                    print(f"⏭️ Skipping {vid}: No transcript available.")
+                    logger.info(f"⏭️ Skipping {vid}: No transcript available.")
 
             except Exception as e:
                 # Catch-all for unexpected crashes in the indexing step
-                print(f"❌ Critical error processing {vid}: {e}")
+                logger.error(f"❌ Critical error processing {vid}: {e}", exc_info=True)
                 continue # Explicitly continue to next video
         
-        print(f"🏁 Batch ingestion complete.")
+        logger.info(f"🏁 Batch ingestion complete.")
 
     background_tasks.add_task(process_videos, video_ids)
     

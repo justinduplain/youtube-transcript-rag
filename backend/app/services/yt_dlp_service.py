@@ -1,6 +1,11 @@
 import yt_dlp
 import os
+import sys
+import logging
 from typing import List, Dict, Optional
+from urllib.parse import urlparse, parse_qs
+
+logger = logging.getLogger(__name__)
 
 class YtDlpService:
     def __init__(self, cookies_path: Optional[str] = None):
@@ -16,13 +21,12 @@ class YtDlpService:
 
         # If it's a mixed URL (watch?v=...&list=...), strip the video part to force playlist extraction
         if process_playlist and 'v=' in url:
-            from urllib.parse import urlparse, parse_qs, urlencode
             parsed = urlparse(url)
             query = parse_qs(parsed.query)
             if 'list' in query:
                 # Reconstruct URL with only the list parameter
                 target_url = f"https://www.youtube.com/playlist?list={query['list'][0]}"
-                print(f"Detected mixed URL. Forcing playlist extraction: {target_url}")
+                logger.info(f"Detected mixed URL. Forcing playlist extraction: {target_url}")
 
         ydl_opts = {
             'extract_flat': True,
@@ -33,13 +37,21 @@ class YtDlpService:
         
         # Priority 1: Direct Browser Access (e.g. 'chrome')
         if self.source_browser:
-            print(f"🍪 Using cookies from browser: {self.source_browser}")
+            logger.info(f"🍪 Using cookies from browser: {self.source_browser}")
+            
+            if sys.platform == 'darwin':
+                logger.info("⚠️  A system dialog may appear asking for Keychain access. Please select 'Allow' to proceed.")
+            elif sys.platform == 'win32':
+                logger.info("⚠️  On Windows, you may need to close the browser to allow access to the cookie database.")
+
             # Correct format: Single tuple, NOT a list of tuples
             ydl_opts['cookiesfrombrowser'] = (self.source_browser, None, None, None)
         # Priority 2: Cookies File
         elif self.cookies_path and os.path.exists(self.cookies_path):
-            print(f"🍪 Using cookies from file: {self.cookies_path}")
+            logger.info(f"🍪 Using cookies from file: {self.cookies_path}")
             ydl_opts['cookiefile'] = self.cookies_path
+        else:
+            logger.info("ℹ️ No cookies configured. Accessing YouTube as a guest.")
 
         with yt_dlp.YoutubeDL(ydl_opts) as ydl:
             try:
@@ -55,7 +67,7 @@ class YtDlpService:
                 return [entry['id'] for entry in info_dict['entries'] if entry and 'id' in entry]
             except Exception as e:
                 # Log error here
-                print(f"Error extracting video IDs: {e}")
+                logger.error(f"Error extracting video IDs: {e}")
                 return []
 
     def get_video_metadata(self, video_id: str) -> Dict:
@@ -75,5 +87,5 @@ class YtDlpService:
             try:
                 return ydl.extract_info(url, download=False)
             except Exception as e:
-                print(f"Error fetching metadata for {video_id}: {e}")
+                logger.error(f"Error fetching metadata for {video_id}: {e}")
                 return {}
