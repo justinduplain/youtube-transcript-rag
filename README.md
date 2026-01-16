@@ -1,4 +1,4 @@
-# YouTube Transcript RAG Pipeline
+# YouTube Transcript RAG Pipeline (in-progress project)
 
 A Retrieval-Augmented Generation (RAG) system that allows you to "chat" with YouTube videos. It ingests transcripts, indexes them using a Hybrid Search (Vector + BM25) architecture, and provides answers with **time-referenced deep links** to the source video.
 
