@@ -7,7 +7,7 @@ A Retrieval-Augmented Generation (RAG) system that allows you to "chat" with You
 *   **Playlist Ingestion:** Automatically handles single videos or full playlists.
 *   **Hybrid Search:** Combines Vector Search (ChromaDB) and Keyword Search (BM25) for high precision.
 *   **Time-Referenced Deep Links:** Citations link directly to the exact second in the video (e.g., `[04:23]`).
-*   **Zero-Trust UI:** Built with USWDS and Tailwind CSS for accessibility and standard compliance.
+*   **Zero-Trust UI:** Built with tokenized USWDS and Tailwind CSS for accessibility and standard compliance.
 *   **Chat History:** Context-aware conversations.
 
 ## 🛠️ Architecture
