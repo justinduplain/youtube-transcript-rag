@@ -1,20 +1,30 @@
-# YouTube Transcript RAG Pipeline
+# YouTube Transcript RAG Pipeline & CMM Design System Study
 
-A Retrieval-Augmented Generation (RAG) system that allows you to "chat" with YouTube videos. It ingests transcripts, indexes them using a Hybrid Search (Vector + BM25) architecture, and provides answers with **time-referenced deep links** to the source video.
+A Retrieval-Augmented Generation (RAG) system that allows you to "chat" with YouTube videos. This project serves as both a functional search tool and an educational sandbox for the **Case Management Modernization (CMM)** design system, focusing on **USWDS compliance**, **Section 508 Accessibility**, and **Design Tokens**.
 
 ## 🌟 Key Features
 
-*   **Playlist Ingestion:** Automatically handles single videos or full playlists.
-*   **Hybrid Search:** Combines Vector Search (ChromaDB) and Keyword Search (BM25) for high precision.
-*   **Time-Referenced Deep Links:** Citations link directly to the exact second in the video (e.g., `[04:23]`).
-*   **Zero-Trust UI:** Built with USWDS and Tailwind CSS for accessibility and standard compliance.
-*   **Chat History:** Context-aware conversations.
+*   **Zero-Trust Research:** Citations link directly to the exact second in the video (e.g., `[04:23]`), allowing for instant verification of AI-generated answers.
+*   **Intelligent Ingestion:** Automatically handles single videos, playlists, or entire channels using `yt-dlp`.
+*   **Hybrid Search Architecture:** Combines semantic Vector Search (ChromaDB) with keyword-based BM25 retrieval using **Reciprocal Rank Fusion (RRF)** for high-precision results.
+*   **Parent-Child Indexing:** Uses a "Small-to-Big" retrieval strategy. Small chunks (child nodes) are used for precise matching, while larger context windows (parent nodes) are provided to the LLM for synthesis.
+*   **Federal Design Standards:** Built with USWDS (@trussworks/react-uswds) and Tailwind CSS, featuring a tokenized styling architecture via **Style Dictionary**.
+*   **High Performance:** Implements `@tanstack/react-virtual` for smooth rendering of large transcript datasets.
 
-## 🛠️ Architecture
+## 🛠️ Tech Stack
 
-*   **Frontend:** React 18, Vite, TypeScript, USWDS, Tailwind CSS.
-*   **Backend:** FastAPI, Python 3.12, Poetry.
-*   **AI/RAG:** LlamaIndex, OpenAI (`gpt-4o-mini`), ChromaDB (Local Vector Store).
+### Frontend
+*   **Core:** React 19, Vite, TypeScript, React Router.
+*   **Design:** USWDS, Tailwind CSS, Style Dictionary (v5).
+*   **Performance:** React Virtual for list virtualization.
+*   **Testing:** Vitest, Vitest-Axe (A11y testing), Storybook.
+
+### Backend
+*   **Core:** FastAPI, Python 3.12+, Poetry.
+*   **Orchestration:** LlamaIndex.
+*   **Vector Store:** ChromaDB (Local).
+*   **Models:** OpenAI `gpt-4o-mini` (LLM) and `text-embedding-3-small` (Embeddings).
+*   **Extraction:** `yt-dlp` and `youtube-transcript-api`.
 
 ## 🚀 Getting Started
 
@@ -28,17 +38,12 @@ A Retrieval-Augmented Generation (RAG) system that allows you to "chat" with You
 cd backend
 
 # Install dependencies
-curl -sSL https://install.python-poetry.org | python3 -
 poetry install
 
 # Configure Environment
-# Create a .env file with your API keys
-echo "OPENAI_API_KEY=sk-..." > .env
-# (Optional) For private playlists, export cookies.txt to backend/cookies.txt
-# OR set YOUTUBE_SOURCE_BROWSER=chrome in .env
-
-# Run Server
-poetry run uvicorn app.main:app --reload
+# Create a .env file
+echo "OPENAI_API_KEY=your_key_here" > .env
+# Optional: Set YOUTUBE_SOURCE_BROWSER=chrome to use local cookies for private content
 ```
 
 ### 2. Setup Frontend
@@ -50,28 +55,34 @@ npm install
 
 # Run Development Server
 npm run dev
+
+# Run Storybook
+npm run storybook
 ```
 
 ### 3. Usage
 1.  Open `http://localhost:5173`.
-2.  Paste a YouTube URL (Video or Playlist) into the Ingestion Form.
-3.  Wait for the alert confirming ingestion started.
-4.  Navigate to the **Chat** page.
-5.  Ask questions! Click the timestamps in "Sources" to verify the answer.
-
-## 🧪 Testing
-
-The backend includes a `pytest` suite for the RAG pipeline.
-
-```bash
-cd backend
-poetry run pytest
-```
+2.  **Ingest:** Paste a YouTube URL (Video/Playlist/Channel). Processing happens in the background.
+3.  **Chat:** Navigate to the **Chat** page to ask questions.
+4.  **Verify:** Click timestamps in the citations to open the video at the exact moment referenced.
 
 ## 📂 Project Structure
 
 *   `frontend/`: React application.
+    *   `src/tokens/`: 3-tier Design Tokens (Base, Semantic, Component).
+    *   `src/components/`: USWDS-compliant UI components + Storybook stories.
+    *   `src/pages/`: Main application views (Ingestion, Chat, Virtual List).
 *   `backend/`: FastAPI application.
-    *   `app/services/`: Core logic (Ingestion, Indexing, Retrieval).
-    *   `app/api/`: REST Endpoints.
-    *   `chroma_db/`: Local vector database (git-ignored).
+    *   `app/api/v1/`: API endpoints for Ingestion and Chat.
+    *   `app/services/`: Core logic for `yt-dlp`, transcript fetching, and LlamaIndex orchestration.
+    *   `chroma_db/`: Local vector database storage.
+
+## 🧪 Testing
+
+```bash
+# Backend tests
+cd backend && poetry run pytest
+
+# Frontend tests & A11y
+cd frontend && npm test
+```
