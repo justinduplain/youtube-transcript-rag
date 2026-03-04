@@ -1,10 +1,15 @@
 import React, { useState } from 'react';
 import { Button, TextInput, FormGroup, Label } from '@trussworks/react-uswds';
 
+interface Source {
+  title: string;
+  url: string;
+}
+
 interface Message {
   role: 'user' | 'assistant';
   content: string;
-  sources?: any[];
+  sources?: Source[];
 }
 
 export const ChatInterface: React.FC = () => {
@@ -34,8 +39,8 @@ export const ChatInterface: React.FC = () => {
       });
 
       const data = await response.json();
-      const assistantMsg: Message = { 
-        role: 'assistant', 
+      const assistantMsg: Message = {
+        role: 'assistant',
         content: data.answer,
         sources: data.sources
       };
@@ -67,7 +72,7 @@ export const ChatInterface: React.FC = () => {
                 <div className="margin-top-2 border-top padding-top-1 font-sans-3xs text-base-dark">
                   <div className="text-bold">Sources:</div>
                   <ul className="margin-0 padding-left-2">
-                    {m.sources.slice(0, 3).map((s, si) => (
+                    {m.sources.map((s, si) => (
                       <li key={si}>
                         <a href={s.url} target="_blank" rel="noopener noreferrer" className="text-primary hover:text-primary-dark">
                           {s.title}

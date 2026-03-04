@@ -5,9 +5,10 @@ import { CmmButton } from '../buttons/CmmButton';
 interface UrlIngestionFormProps {
   onSubmit: (url: string) => void;
   isLoading?: boolean;
+  statusMessage?: string;
 }
 
-export const UrlIngestionForm = ({ onSubmit, isLoading = false }: UrlIngestionFormProps) => {
+export const UrlIngestionForm = ({ onSubmit, isLoading = false, statusMessage }: UrlIngestionFormProps) => {
   const [url, setUrl] = useState('');
   const [error, setError] = useState<string | undefined>(undefined);
 
@@ -27,7 +28,7 @@ export const UrlIngestionForm = ({ onSubmit, isLoading = false }: UrlIngestionFo
         <div className="grid-col-fill">
           <CmmUrlInput
             id="youtube-url"
-            label="YouTube Source"
+            label="YouTube Source (playlist/video)"
             placeholder="https://www.youtube.com/watch?v=..."
             value={url}
             onChange={(e) => setUrl(e.target.value)}
@@ -36,16 +37,21 @@ export const UrlIngestionForm = ({ onSubmit, isLoading = false }: UrlIngestionFo
           />
         </div>
         <div className="grid-col-auto display-flex flex-align-end">
-          <CmmButton 
-            type="submit" 
+          <CmmButton
+            type="submit"
             variant="gold"
             disabled={isLoading}
             className="margin-top-0"
           >
-            {isLoading ? 'Processing...' : 'Ingest'}
+            Ingest
           </CmmButton>
         </div>
       </div>
+      {statusMessage && (
+        <p className="text-base font-body-sm margin-top-1 margin-bottom-0">
+          {statusMessage}
+        </p>
+      )}
     </form>
   );
 };

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { Routes, Route, Link } from 'react-router-dom';
 import { UrlIngestionForm } from './components/forms/UrlIngestionForm';
 import { TestTranscriptCardPage } from './pages/TestTranscriptCardPage';
@@ -7,11 +7,15 @@ import { ChatPage } from './pages/ChatPage';
 
 function App() {
   const [loading, setLoading] = useState(false);
+  const [statusMessage, setStatusMessage] = useState<string | undefined>(undefined);
+  const pollRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
   const handleIngest = async (url: string) => {
     console.log('Ingesting:', url);
+    if (pollRef.current) clearInterval(pollRef.current);
     setLoading(true);
-    
+    setStatusMessage('Uploading...');
+
     try {
       const response = await fetch('http://localhost:8000/api/v1/ingest', {
         method: 'POST',
@@ -24,11 +28,36 @@ function App() {
       }
 
       const data = await response.json();
-      alert(`Ingestion started for ${data.video_ids.length} videos.`);
+      const total: number = data.video_ids?.length ?? 0;
+      const jobId: string = data.job_id;
+
+      setStatusMessage(`Processing video 1/${total}...`);
+
+      pollRef.current = setInterval(async () => {
+        try {
+          const statusRes = await fetch(`http://localhost:8000/api/v1/ingest/status/${jobId}`);
+          if (!statusRes.ok) return;
+          const status = await statusRes.json();
+
+          if (status.status === 'complete') {
+            clearInterval(pollRef.current!);
+            pollRef.current = null;
+            setStatusMessage(`Done. ${total} video${total !== 1 ? 's' : ''} ingested.`);
+            setLoading(false);
+          } else {
+            setStatusMessage(`Processing video ${status.current}/${total}...`);
+          }
+        } catch {
+          clearInterval(pollRef.current!);
+          pollRef.current = null;
+          setStatusMessage('Lost connection to backend.');
+          setLoading(false);
+        }
+      }, 1500);
+
     } catch (error) {
       console.error('Ingestion error:', error);
-      alert('Failed to start ingestion. Make sure the backend is running.');
-    } finally {
+      setStatusMessage('Failed to start ingestion. Make sure the backend is running.');
       setLoading(false);
     }
   };
@@ -57,16 +86,6 @@ function App() {
                     <span>Chat</span>
                   </Link>
                 </li>
-                <li className="usa-nav__primary-item">
-                  <Link className="usa-nav__link" to="/transcript">
-                    <span>Transcript Test</span>
-                  </Link>
-                </li>
-                <li className="usa-nav__primary-item">
-                  <Link className="usa-nav__link" to="/virtual-transcript">
-                    <span>Virtual Scroll</span>
-                  </Link>
-                </li>
               </ul>
             </nav>
           </div>
@@ -81,10 +100,16 @@ function App() {
               <div className="bg-white padding-4 radius-lg border border-base-lighter shadow-1">
                 <h1 className="font-heading-xl margin-top-0">Data Ingestion</h1>
                 <p className="usa-intro text-base-dark">
-                  Enter a YouTube video URL to extract the transcript and generate embeddings for the vector store.
+                  1) Embed: Enter a YouTube Video URL or Playlist URL to extract the transcripts and generate embeddings for the vector store.
+                </p>
+                <p className="usa-intro text-base-dark">
+                  2) Chat: Once they are processed, ask any questions about the videos in the video/playlist and get answers with time stamps. 
+                </p>
+                <p className="text-base-dark sm">
+                  **To use private playlists, you must be using chrome browser and be signed in to your google account.
                 </p>
                 <div className="margin-top-4">
-                  <UrlIngestionForm onSubmit={handleIngest} isLoading={loading} />
+                  <UrlIngestionForm onSubmit={handleIngest} isLoading={loading} statusMessage={statusMessage} />
                 </div>
               </div>
             </main>

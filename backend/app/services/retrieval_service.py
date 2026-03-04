@@ -33,20 +33,20 @@ class RetrievalService:
         )
         
         # 2. Vector Retriever
-        vector_retriever = index.as_retriever(similarity_top_k=10)
-        
+        vector_retriever = index.as_retriever(similarity_top_k=5)
+
         # 3. BM25 Retriever
         # Note: BM25Retriever requires nodes. We can get them from docstore.
         all_nodes = list(self.docstore.docs.values())
         bm25_retriever = BM25Retriever.from_defaults(
-            nodes=all_nodes, 
-            similarity_top_k=10
+            nodes=all_nodes,
+            similarity_top_k=5
         )
-        
+
         # 4. Hybrid Retriever (RRF)
         hybrid_retriever = QueryFusionRetriever(
             [vector_retriever, bm25_retriever],
-            similarity_top_k=10,
+            similarity_top_k=5,
             num_queries=1,
             mode="reciprocal_rerank",
             use_async=True,
@@ -96,7 +96,13 @@ class RetrievalService:
             system_prompt=(
                 "You are a helpful YouTube assistant. "
                 "Answer questions based ONLY on the provided context from video transcripts. "
-                "If the answer is not in the context, say you don't know."
+                "If the answer is not in the context, say you don't know.\n\n"
+                "You MUST format your response EXACTLY as follows — no exceptions:\n"
+                "ANSWER: <your answer text here, no URLs, no video titles, no source references>\n"
+                "USED_VIDEOS: <comma-separated list of video_id values you actually used, or 'none'>\n\n"
+                "The video_id for each context chunk is in its metadata. "
+                "Only list video_ids from chunks you genuinely drew upon. "
+                "Do not add any text before 'ANSWER:' or after the USED_VIDEOS line."
             )
         )
         
