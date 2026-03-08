@@ -80,5 +80,14 @@ class IndexingService:
         
         # Persist docstore
         self.docstore.persist(self.docstore_path)
-        
+
         return index
+
+    def clear_all(self):
+        """Clears all indexed data from ChromaDB and docstore."""
+        self.db.delete_collection(self.collection_name)
+        self.chroma_collection = self.db.get_or_create_collection(self.collection_name)
+        self.vector_store = ChromaVectorStore(chroma_collection=self.chroma_collection)
+        self.docstore = SimpleDocumentStore()
+        if os.path.exists(self.docstore_path):
+            os.remove(self.docstore_path)

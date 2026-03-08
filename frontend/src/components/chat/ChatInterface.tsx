@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Button, TextInput, FormGroup, Label } from '@trussworks/react-uswds';
 
 interface Source {
@@ -16,6 +16,11 @@ export const ChatInterface: React.FC = () => {
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const bottomRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    bottomRef.current?.scrollIntoView({ behavior: 'smooth' });
+  }, [messages, isLoading]);
 
   const handleSend = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -57,9 +62,17 @@ export const ChatInterface: React.FC = () => {
     <div className="display-flex flex-column height-tablet-lg">
       <div className="flex-1 overflow-y-auto padding-2 bg-gray-5 border radius-md margin-bottom-2" style={{ maxHeight: '500px' }}>
         {messages.length === 0 && (
-          <p className="text-center text-base-dark margin-top-4">
-            Ask a question about the indexed YouTube videos.
-          </p>
+          <div>
+            <p className="usa-intro text-base-dark">
+              1) Embed: Enter a YouTube Video URL or Playlist URL to extract the transcripts and generate embeddings for the vector store.
+            </p>
+            <p className="usa-intro text-base-dark">
+              2) Chat: Once they are processed, ask any questions about the videos in the video/playlist and get verified answers with time stamps. 
+            </p>
+            <p className="text-base-dark sm">
+              **To use private playlists, you must be using chrome browser and be signed in to your google account.
+            </p>
+          </div>
         )}
         {messages.map((m, i) => (
           <div key={i} className={`margin-bottom-2 display-flex ${m.role === 'user' ? 'justify-content-end' : 'justify-content-start'}`}>
@@ -86,6 +99,7 @@ export const ChatInterface: React.FC = () => {
           </div>
         ))}
         {isLoading && <div className="text-base-dark font-sans-xs">Assistant is thinking...</div>}
+        <div ref={bottomRef} />
       </div>
 
       <form onSubmit={handleSend}>

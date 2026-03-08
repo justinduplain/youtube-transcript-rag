@@ -6,9 +6,10 @@ interface UrlIngestionFormProps {
   onSubmit: (url: string) => void;
   isLoading?: boolean;
   statusMessage?: string;
+  compact?: boolean;
 }
 
-export const UrlIngestionForm = ({ onSubmit, isLoading = false, statusMessage }: UrlIngestionFormProps) => {
+export const UrlIngestionForm = ({ onSubmit, isLoading = false, statusMessage, compact = false }: UrlIngestionFormProps) => {
   const [url, setUrl] = useState('');
   const [error, setError] = useState<string | undefined>(undefined);
 
@@ -28,8 +29,8 @@ export const UrlIngestionForm = ({ onSubmit, isLoading = false, statusMessage }:
         <div className="grid-col-fill">
           <CmmUrlInput
             id="youtube-url"
-            label="YouTube Source (playlist/video)"
-            placeholder="https://www.youtube.com/watch?v=..."
+            label={compact ? '' : 'YouTube Source (playlist/video)'}
+            placeholder={compact ? 'Paste YouTube URL...' : 'https://www.youtube.com/watch?v=...'}
             value={url}
             onChange={(e) => setUrl(e.target.value)}
             error={error}

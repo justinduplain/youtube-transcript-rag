@@ -70,9 +70,11 @@ async def ingest_url(request: IngestRequest, background_tasks: BackgroundTasks):
     Ingests a YouTube URL (Video, Playlist, or Channel).
     Processing is done in the background. Poll /ingest/status/{job_id} for progress.
     """
-    video_ids = yt_service.get_video_ids(request.url)
+    video_ids, source_title = yt_service.get_video_ids(request.url)
     if not video_ids:
         raise HTTPException(status_code=400, detail="Could not extract video IDs from URL")
+
+    video_ids = video_ids[:10]
 
     job_id = str(uuid.uuid4())
     total = len(video_ids)
@@ -130,7 +132,8 @@ async def ingest_url(request: IngestRequest, background_tasks: BackgroundTasks):
     return {
         "message": f"Started ingestion for {total} videos",
         "video_ids": video_ids,
-        "job_id": job_id
+        "job_id": job_id,
+        "source_title": source_title,
     }
 
 @router.get("/ingest/status/{job_id}")
@@ -140,11 +143,26 @@ async def ingest_status(job_id: str):
         raise HTTPException(status_code=404, detail="Job not found")
     return jobs[job_id]
 
+@router.delete("/sources")
+async def clear_sources():
+    """Clears all indexed sources and resets job state."""
+    indexing_service.clear_all()
+    retrieval_service.vector_store = indexing_service.vector_store
+    retrieval_service.docstore = indexing_service.docstore
+    jobs.clear()
+    return {"message": "All sources cleared."}
+
 @router.post("/chat")
 async def chat(request: ChatRequest):
     """
     Queries the indexed transcripts with conversation context.
     """
+    if indexing_service.chroma_collection.count() == 0:
+        return {
+            "answer": "No sources added, please ingest a youtube video URL or playlist URL to get started.",
+            "sources": []
+        }
+
     try:
         # Convert Pydantic messages to LlamaIndex ChatMessages
         chat_history = [
