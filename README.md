@@ -9,7 +9,6 @@ A Retrieval-Augmented Generation (RAG) system that allows you to "chat" with You
 *   **Hybrid Search Architecture:** Combines semantic Vector Search (ChromaDB) with keyword-based BM25 retrieval using **Reciprocal Rank Fusion (RRF)** for high-precision results.
 *   **Parent-Child Indexing:** Uses a "Small-to-Big" retrieval strategy. Small chunks (child nodes) are used for precise matching, while larger context windows (parent nodes) are provided to the LLM for synthesis.
 *   **Federal Design Standards:** Built with USWDS (@trussworks/react-uswds) and Tailwind CSS, featuring a tokenized styling architecture via **Style Dictionary**.
-*   **High Performance:** Implements `@tanstack/react-virtual` for smooth rendering of large transcript datasets.
 
 ## 🛠️ Tech Stack
 
