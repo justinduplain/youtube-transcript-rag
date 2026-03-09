@@ -30,6 +30,7 @@ storybook-static
 .env
 .env.*
 cookies.txt
+*.pem
 
 # Python
 __pycache__/
