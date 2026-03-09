@@ -1,10 +1,23 @@
+import os
 from youtube_transcript_api import YouTubeTranscriptApi
+from youtube_transcript_api.proxies import WebshareProxyConfig
 from typing import List, Dict, Optional
 
 class TranscriptService:
     def __init__(self):
-        # Initialize the API client once
-        self.api = YouTubeTranscriptApi()
+        proxy_username = os.getenv("WEBSHARE_PROXY_USERNAME")
+        proxy_password = os.getenv("WEBSHARE_PROXY_PASSWORD")
+
+        if proxy_username and proxy_password:
+            proxy_config = WebshareProxyConfig(
+                proxy_username=proxy_username,
+                proxy_password=proxy_password,
+            )
+            self.api = YouTubeTranscriptApi(proxy_config=proxy_config)
+            print("TranscriptService: using Webshare rotating residential proxy")
+        else:
+            self.api = YouTubeTranscriptApi()
+            print("TranscriptService: no proxy configured")
 
     def get_transcript(self, video_id: str, languages: List[str] = ['en']) -> List[Dict]:
         """
