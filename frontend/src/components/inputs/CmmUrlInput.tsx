@@ -43,6 +43,7 @@ export const CmmUrlInput = ({
         id={id}
         name={id}
         type="url"
+        autoComplete="off"
         aria-describedby={error ? `${id}-error-message` : undefined}
         // Tailwind utilities layer wins over USWDS defaults
         className="max-w-xl focus:ring-cmm-color-brand-primary" 

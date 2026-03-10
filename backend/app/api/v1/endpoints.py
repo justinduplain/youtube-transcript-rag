@@ -1,6 +1,6 @@
 from fastapi import APIRouter, HTTPException, BackgroundTasks
 from pydantic import BaseModel, Field
-from typing import Optional, List, Literal
+from typing import Optional, List, Dict, Literal
 from app.services.yt_dlp_service import YtDlpService
 from app.services.transcript_service import TranscriptService
 from app.services.indexing_service import IndexingService
@@ -70,7 +70,7 @@ async def ingest_url(request: IngestRequest, background_tasks: BackgroundTasks):
     Ingests a YouTube URL (Video, Playlist, or Channel).
     Processing is done in the background. Poll /ingest/status/{job_id} for progress.
     """
-    video_ids, source_title, source_type = yt_service.get_video_ids(request.url)
+    video_ids, source_title, source_type, video_titles = yt_service.get_video_ids(request.url)
     if not video_ids:
         raise HTTPException(status_code=400, detail="Could not extract video IDs from URL")
 
@@ -92,37 +92,22 @@ async def ingest_url(request: IngestRequest, background_tasks: BackgroundTasks):
     jobs[job_id] = {"status": "processing", "current": 0, "total": total}
 
     # Define background task
-    def process_videos(ids: List[str], jid: str, src_url: str, src_title: str, src_type: str):
+    def process_videos(ids: List[str], jid: str, src_url: str, src_title: str, src_type: str, video_titles: Dict[str, str]):
         logger.info(f"🚀 Starting batch ingestion for {total} videos: {ids}")
 
         for i, vid in enumerate(ids, 1):
             jobs[jid]["current"] = i
             logger.info(f"--- Processing [{i}/{total}]: {vid} ---")
             try:
-                # 1. Fetch Metadata
-                try:
-                    raw_metadata = yt_service.get_video_metadata(vid)
-                    # Filter metadata to keep it small for vector storage
-                    metadata = {
-                        "video_id": raw_metadata.get("id"),
-                        "title": raw_metadata.get("title"),
-                        "uploader": raw_metadata.get("uploader"),
-                        "upload_date": raw_metadata.get("upload_date"),
-                        "view_count": raw_metadata.get("view_count"),
-                        "url": raw_metadata.get("webpage_url") or f"https://www.youtube.com/watch?v={vid}",
-                        "source_url": src_url,
-                        "source_title": src_title,
-                        "source_type": src_type,
-                    }
-                except Exception as e:
-                    logger.warning(f"⚠️ Failed to fetch metadata for {vid}: {e}")
-                    metadata = {
-                        "video_id": vid,
-                        "url": f"https://www.youtube.com/watch?v={vid}",
-                        "source_url": src_url,
-                        "source_title": src_title,
-                        "source_type": src_type,
-                    }
+                # 1. Build metadata from title map
+                metadata = {
+                    "video_id": vid,
+                    "title": video_titles.get(vid, ""),
+                    "url": f"https://www.youtube.com/watch?v={vid}",
+                    "source_url": src_url,
+                    "source_title": src_title,
+                    "source_type": src_type,
+                }
 
                 # 2. Fetch Transcript
                 try:
@@ -147,7 +132,7 @@ async def ingest_url(request: IngestRequest, background_tasks: BackgroundTasks):
         jobs[jid]["status"] = "complete"
         logger.info(f"🏁 Batch ingestion complete.")
 
-    background_tasks.add_task(process_videos, video_ids, job_id, request.url, source_title, source_type)
+    background_tasks.add_task(process_videos, video_ids, job_id, request.url, source_title, source_type, video_titles)
 
     return {
         "message": f"Started ingestion for {total} videos",

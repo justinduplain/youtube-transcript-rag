@@ -212,6 +212,7 @@ export const ChatInterface: React.FC = () => {
               id="chat-input"
               name="chat-input"
               type="text"
+              autoComplete="off"
               value={input}
               onChange={(e) => setInput(e.target.value)}
               disabled={isLoading}

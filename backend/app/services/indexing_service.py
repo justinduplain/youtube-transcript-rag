@@ -45,11 +45,10 @@ class IndexingService:
                 **metadata
             },
             excluded_embed_metadata_keys=[
-                "video_id", "title", "uploader", "upload_date",
-                "view_count", "url", "source_url", "source_title", "source_type"
+                "video_id", "title", "url", "source_url", "source_title", "source_type"
             ],
             excluded_llm_metadata_keys=[
-                "uploader", "upload_date", "view_count", "source_type"
+                "source_type"
             ],
         )
 
