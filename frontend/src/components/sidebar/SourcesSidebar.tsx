@@ -70,7 +70,11 @@ export const SourcesSidebar = ({
                   {source.label}
                 </p>
                 <p className="font-body-xs margin-0 text-base">
-                  {source.videoCount > 0 && `${source.videoCount} video${source.videoCount !== 1 ? 's' : ''} · `}
+                  <span className="text-base-dark">
+                    {source.type === 'playlist'
+                      ? `Playlist · ${source.videoCount > 0 ? `${source.videoCount} video${source.videoCount !== 1 ? 's' : ''}` : '…'} · `
+                      : 'Video · '}
+                  </span>
                   <span className={statusClass(source.status)}>
                     {statusLabel(source.status)}
                   </span>

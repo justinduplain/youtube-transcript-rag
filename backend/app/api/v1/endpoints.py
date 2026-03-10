@@ -70,7 +70,7 @@ async def ingest_url(request: IngestRequest, background_tasks: BackgroundTasks):
     Ingests a YouTube URL (Video, Playlist, or Channel).
     Processing is done in the background. Poll /ingest/status/{job_id} for progress.
     """
-    video_ids, source_title = yt_service.get_video_ids(request.url)
+    video_ids, source_title, source_type = yt_service.get_video_ids(request.url)
     if not video_ids:
         raise HTTPException(status_code=400, detail="Could not extract video IDs from URL")
 
@@ -81,7 +81,7 @@ async def ingest_url(request: IngestRequest, background_tasks: BackgroundTasks):
     jobs[job_id] = {"status": "processing", "current": 0, "total": total}
 
     # Define background task
-    def process_videos(ids: List[str], jid: str):
+    def process_videos(ids: List[str], jid: str, src_url: str, src_title: str, src_type: str):
         logger.info(f"🚀 Starting batch ingestion for {total} videos: {ids}")
 
         for i, vid in enumerate(ids, 1):
@@ -98,11 +98,20 @@ async def ingest_url(request: IngestRequest, background_tasks: BackgroundTasks):
                         "uploader": raw_metadata.get("uploader"),
                         "upload_date": raw_metadata.get("upload_date"),
                         "view_count": raw_metadata.get("view_count"),
-                        "url": raw_metadata.get("webpage_url") or f"https://www.youtube.com/watch?v={vid}"
+                        "url": raw_metadata.get("webpage_url") or f"https://www.youtube.com/watch?v={vid}",
+                        "source_url": src_url,
+                        "source_title": src_title,
+                        "source_type": src_type,
                     }
                 except Exception as e:
                     logger.warning(f"⚠️ Failed to fetch metadata for {vid}: {e}")
-                    metadata = {} # Continue with minimal metadata
+                    metadata = {
+                        "video_id": vid,
+                        "url": f"https://www.youtube.com/watch?v={vid}",
+                        "source_url": src_url,
+                        "source_title": src_title,
+                        "source_type": src_type,
+                    }
 
                 # 2. Fetch Transcript
                 try:
@@ -127,13 +136,14 @@ async def ingest_url(request: IngestRequest, background_tasks: BackgroundTasks):
         jobs[jid]["status"] = "complete"
         logger.info(f"🏁 Batch ingestion complete.")
 
-    background_tasks.add_task(process_videos, video_ids, job_id)
+    background_tasks.add_task(process_videos, video_ids, job_id, request.url, source_title, source_type)
 
     return {
         "message": f"Started ingestion for {total} videos",
         "video_ids": video_ids,
         "job_id": job_id,
         "source_title": source_title,
+        "source_type": source_type,
     }
 
 @router.get("/ingest/status/{job_id}")
@@ -142,6 +152,36 @@ async def ingest_status(job_id: str):
     if job_id not in jobs:
         raise HTTPException(status_code=404, detail="Job not found")
     return jobs[job_id]
+
+@router.get("/sources")
+async def list_sources():
+    """Returns indexed sources grouped by original submitted URL."""
+    result = indexing_service.chroma_collection.get(include=["metadatas"])
+    seen: dict = {}
+    for meta in result["metadatas"]:
+        # Use source_url if stored, fall back to video URL for legacy entries
+        source_url = meta.get("source_url") or meta.get("url", "")
+        if not source_url:
+            continue
+        if source_url not in seen:
+            seen[source_url] = {
+                "source_url": source_url,
+                "source_title": meta.get("source_title") or meta.get("title", source_url),
+                "source_type": meta.get("source_type", "video"),
+                "video_ids": set(),
+            }
+        vid = meta.get("video_id")
+        if vid:
+            seen[source_url]["video_ids"].add(vid)
+    return [
+        {
+            "source_url": s["source_url"],
+            "source_title": s["source_title"],
+            "source_type": s["source_type"],
+            "video_count": len(s["video_ids"]),
+        }
+        for s in seen.values()
+    ]
 
 @router.delete("/sources")
 async def clear_sources():

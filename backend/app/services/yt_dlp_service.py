@@ -12,9 +12,10 @@ class YtDlpService:
         self.cookies_path = cookies_path or os.getenv("YOUTUBE_COOKIES_PATH")
         self.source_browser = os.getenv("YOUTUBE_SOURCE_BROWSER") # e.g., 'chrome', 'firefox', 'safari'
 
-    def get_video_ids(self, url: str) -> tuple[List[str], str]:
+    def get_video_ids(self, url: str) -> tuple[List[str], str, str]:
         """
         Extracts video IDs from a YouTube URL (Video, Playlist, or Channel).
+        Returns (video_ids, source_title, source_type) where source_type is 'video' or 'playlist'.
         """
         process_playlist = 'list=' in url
         target_url = url
@@ -57,22 +58,22 @@ class YtDlpService:
             try:
                 info_dict = ydl.extract_info(target_url, download=False)
                 if not info_dict:
-                    return [], ''
+                    return [], '', 'video'
 
                 source_title = info_dict.get('title') or info_dict.get('playlist_title') or ''
 
                 # Check if it's a single video (no 'entries')
                 if 'entries' not in info_dict:
                     video_id = info_dict.get('id')
-                    return ([video_id] if video_id else []), source_title
+                    return ([video_id] if video_id else []), source_title, 'video'
 
                 # It's a playlist or channel
                 ids = [entry['id'] for entry in info_dict['entries'] if entry and 'id' in entry]
-                return ids, source_title
+                return ids, source_title, 'playlist'
             except Exception as e:
                 # Log error here
                 logger.error(f"Error extracting video IDs: {e}")
-                return [], ''
+                return [], '', 'video'
 
     def get_video_metadata(self, video_id: str) -> Dict:
         """

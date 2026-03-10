@@ -43,13 +43,20 @@ class IndexingService:
                 "title": metadata.get("title", ""),
                 "url": f"https://www.youtube.com/watch?v={video_id}",
                 **metadata
-            }
+            },
+            excluded_embed_metadata_keys=[
+                "video_id", "title", "uploader", "upload_date",
+                "view_count", "url", "source_url", "source_title", "source_type"
+            ],
+            excluded_llm_metadata_keys=[
+                "uploader", "upload_date", "view_count", "source_type"
+            ],
         )
-        
+
         # Configure HierarchicalNodeParser
-        # Parent: ~512 tokens, Child: ~128 tokens
+        # Parent: ~1024 tokens, Child: ~256 tokens
         node_parser = HierarchicalNodeParser.from_defaults(
-            chunk_sizes=[512, 128]
+            chunk_sizes=[1024, 256]
         )
         
         nodes = node_parser.get_nodes_from_documents([doc])

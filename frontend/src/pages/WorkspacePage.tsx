@@ -1,4 +1,4 @@
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { SourcesSidebar } from '../components/sidebar/SourcesSidebar';
 import { ChatInterface } from '../components/chat/ChatInterface';
 
@@ -7,6 +7,7 @@ export interface IngestionSource {
   label: string;
   videoCount: number;
   status: 'processing' | 'complete' | 'error';
+  type: 'video' | 'playlist';
 }
 
 export const WorkspacePage = () => {
@@ -16,6 +17,25 @@ export const WorkspacePage = () => {
   const [statusMessage, setStatusMessage] = useState<string | undefined>();
   const [chatKey, setChatKey] = useState(0);
   const pollRef = useRef<ReturnType<typeof setInterval> | null>(null);
+
+  useEffect(() => {
+    fetch('http://localhost:8000/api/v1/sources')
+      .then((res) => res.json())
+      .then((data: Array<{ source_url: string; source_title: string; source_type: string; video_count: number }>) => {
+        if (data.length > 0) {
+          setSources(
+            data.map((s) => ({
+              url: s.source_url,
+              label: s.source_title || s.source_url,
+              videoCount: s.video_count,
+              status: 'complete',
+              type: s.source_type === 'playlist' ? 'playlist' : 'video',
+            }))
+          );
+        }
+      })
+      .catch(() => {});
+  }, []);
 
   const handleIngest = async (url: string) => {
     if (pollRef.current) clearInterval(pollRef.current);
@@ -27,6 +47,7 @@ export const WorkspacePage = () => {
       label: url.length > 40 ? url.slice(0, 37) + '...' : url,
       videoCount: 0,
       status: 'processing',
+      type: 'video',
     };
     setSources((prev) => [...prev, newSource]);
 
@@ -43,8 +64,9 @@ export const WorkspacePage = () => {
       const total: number = data.video_ids?.length ?? 0;
       const jobId: string = data.job_id;
       const resolvedLabel = data.source_title || (url.length > 40 ? url.slice(0, 37) + '...' : url);
+      const resolvedType: 'video' | 'playlist' = data.source_type === 'playlist' ? 'playlist' : 'video';
       setSources((prev) =>
-        prev.map((s) => (s.url === url ? { ...s, label: resolvedLabel } : s))
+        prev.map((s) => (s.url === url ? { ...s, label: resolvedLabel, type: resolvedType } : s))
       );
 
       setStatusMessage(`Processing video 1/${total}...`);

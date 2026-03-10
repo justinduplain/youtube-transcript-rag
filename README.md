@@ -145,6 +145,7 @@ If the variables are absent or empty, the backend falls back to direct requests 
 | `POST` | `/api/v1/ingest` | Start background ingestion of a YouTube URL |
 | `GET` | `/api/v1/ingest/status/{job_id}` | Poll ingestion job progress |
 | `POST` | `/api/v1/chat` | Query indexed transcripts with conversation history |
+| `GET` | `/api/v1/sources` | List all indexed video sources |
 | `DELETE` | `/api/v1/sources` | Clear all indexed data |
 | `GET` | `/health` | Health check |
 
