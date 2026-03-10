@@ -1,3 +1,4 @@
+import { Icon } from '@trussworks/react-uswds';
 import type { IngestionSource } from '../../pages/WorkspacePage';
 import { UrlIngestionForm } from '../forms/UrlIngestionForm';
 
@@ -9,6 +10,7 @@ interface SourcesSidebarProps {
   ingestLoading: boolean;
   statusMessage?: string;
   onClearAll: () => void;
+  onCollapse: () => void;
 }
 
 const statusLabel = (status: IngestionSource['status']) => {
@@ -31,6 +33,7 @@ export const SourcesSidebar = ({
   ingestLoading,
   statusMessage,
   onClearAll,
+  onCollapse,
 }: SourcesSidebarProps) => {
   return (
     <aside
@@ -38,9 +41,18 @@ export const SourcesSidebar = ({
       className="border-right border-base-lighter padding-2 overflow-y-auto"
     >
       <div className="display-flex flex-align-center flex-justify margin-bottom-2 margin-top-1">
-        <p className="font-body-sm text-bold text-uppercase text-base margin-0">
-          Sources
-        </p>
+        <div className="display-flex flex-align-center">
+          <button
+            className="usa-button usa-button--unstyled text-base margin-right-05"
+            onClick={onCollapse}
+            title="Collapse sidebar"
+          >
+            <Icon.NavigateBefore size={3} />
+          </button>
+          <p className="font-body-sm text-bold text-uppercase text-base margin-0">
+            Sources
+          </p>
+        </div>
         {sources.length > 0 && (
           <button
             className="usa-button usa-button--unstyled font-body-3xs text-secondary"

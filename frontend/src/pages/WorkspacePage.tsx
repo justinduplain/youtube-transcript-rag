@@ -1,4 +1,5 @@
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect, useCallback } from 'react';
+import { Icon } from '@trussworks/react-uswds';
 import { SourcesSidebar } from '../components/sidebar/SourcesSidebar';
 import { ChatInterface } from '../components/chat/ChatInterface';
 
@@ -16,7 +17,10 @@ export const WorkspacePage = () => {
   const [ingestLoading, setIngestLoading] = useState(false);
   const [statusMessage, setStatusMessage] = useState<string | undefined>();
   const [chatKey, setChatKey] = useState(0);
+  const [sidebarOpen, setSidebarOpen] = useState(window.innerWidth >= 768);
   const pollRef = useRef<ReturnType<typeof setInterval> | null>(null);
+
+  const toggleSidebar = useCallback(() => setSidebarOpen((prev) => !prev), []);
 
   useEffect(() => {
     fetch('/api/v1/sources')
@@ -126,16 +130,30 @@ export const WorkspacePage = () => {
 
   return (
     <main style={{ display: 'flex', height: 'calc(100vh - 64px)' }}>
-      <SourcesSidebar
-        sources={sources}
-        isAddingMore={isAddingMore || sources.length === 0}
-        onAddMore={() => setIsAddingMore(true)}
-        onIngest={handleIngest}
-        ingestLoading={ingestLoading}
-        statusMessage={statusMessage}
-        onClearAll={handleClearAll}
-      />
+      {sidebarOpen && (
+        <SourcesSidebar
+          sources={sources}
+          isAddingMore={isAddingMore || sources.length === 0}
+          onAddMore={() => setIsAddingMore(true)}
+          onIngest={handleIngest}
+          ingestLoading={ingestLoading}
+          statusMessage={statusMessage}
+          onClearAll={handleClearAll}
+          onCollapse={toggleSidebar}
+        />
+      )}
       <div className="flex-1 display-flex flex-column overflow-hidden padding-4">
+        {!sidebarOpen && (
+          <button
+            className="usa-button usa-button--unstyled font-body-xs margin-bottom-1 display-flex flex-align-center"
+            onClick={toggleSidebar}
+            style={{ alignSelf: 'flex-start' }}
+            title="Show sources"
+          >
+            <Icon.NavigateNext size={3} />
+            Sources
+          </button>
+        )}
         <ChatInterface key={chatKey} />
       </div>
     </main>
