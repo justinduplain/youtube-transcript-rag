@@ -19,7 +19,7 @@ export const WorkspacePage = () => {
   const pollRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
   useEffect(() => {
-    fetch('http://localhost:8000/api/v1/sources')
+    fetch('/api/v1/sources')
       .then((res) => res.json())
       .then((data: Array<{ source_url: string; source_title: string; source_type: string; video_count: number }>) => {
         if (data.length > 0) {
@@ -52,7 +52,7 @@ export const WorkspacePage = () => {
     setSources((prev) => [...prev, newSource]);
 
     try {
-      const response = await fetch('http://localhost:8000/api/v1/ingest', {
+      const response = await fetch('/api/v1/ingest', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ url }),
@@ -73,7 +73,7 @@ export const WorkspacePage = () => {
 
       pollRef.current = setInterval(async () => {
         try {
-          const statusRes = await fetch(`http://localhost:8000/api/v1/ingest/status/${jobId}`);
+          const statusRes = await fetch(`/api/v1/ingest/status/${jobId}`);
           if (!statusRes.ok) return;
           const status = await statusRes.json();
 
@@ -112,7 +112,7 @@ export const WorkspacePage = () => {
   };
 
   const handleClearAll = async () => {
-    await fetch('http://localhost:8000/api/v1/sources', { method: 'DELETE' });
+    await fetch('/api/v1/sources', { method: 'DELETE' });
     setSources([]);
     setStatusMessage(undefined);
     setIsAddingMore(false);

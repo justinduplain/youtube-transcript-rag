@@ -7,8 +7,19 @@ const CopyLinkButton: React.FC<{ href: string }> = ({ href }) => {
   return (
     <button
       onClick={() => {
-        navigator.clipboard.writeText(href);
-        setCopied(true);
+        if (navigator.clipboard) {
+          navigator.clipboard.writeText(href).then(() => setCopied(true));
+        } else {
+          const textarea = document.createElement('textarea');
+          textarea.value = href;
+          textarea.style.position = 'fixed';
+          textarea.style.opacity = '0';
+          document.body.appendChild(textarea);
+          textarea.select();
+          document.execCommand('copy');
+          document.body.removeChild(textarea);
+          setCopied(true);
+        }
       }}
       style={{ background: 'none', border: 'none', padding: 0, cursor: 'pointer', color: 'inherit', textDecoration: 'underline' }}
     >
@@ -55,7 +66,7 @@ const WELCOME_MESSAGE: Message = {
 1. **Embed:** Paste a YouTube video or playlist URL in the sidebar to extract transcripts and build the vector store.
 2. **Chat:** Once processing is complete, ask questions about the content and get cited answers with timestamps.
 
-> **Private/unlisted playlists:** Only supported when running locally (`http://localhost`). Requires Chrome with your Google account signed in. Not available on the hosted version.
+> **Private/unlisted playlists:** Only supported when running locally (\`http://localhost\`). Requires Chrome with your Google account signed in. Not available on the hosted version.
 > **Limits:** Up to 5 videos per playlist, 10 videos total.
 
 ---
@@ -126,7 +137,7 @@ export const ChatInterface: React.FC = () => {
     setIsLoading(true);
 
     try {
-      const response = await fetch('http://localhost:8000/api/v1/chat', {
+      const response = await fetch('/api/v1/chat', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

@@ -17,6 +17,16 @@ export default defineConfig({
       // Allow serving files from parent directory
       allow: ['..'],
     },
+    proxy: {
+      '/api': {
+        target: 'http://localhost:8000',
+        changeOrigin: true,
+      },
+      '/health': {
+        target: 'http://localhost:8000',
+        changeOrigin: true,
+      },
+    },
   },
   test: {
     projects: [{
