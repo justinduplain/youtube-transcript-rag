@@ -47,7 +47,7 @@ export const SourcesSidebar = ({
             onClick={onCollapse}
             title="Collapse sidebar"
           >
-            <Icon.NavigateBefore size={3} />
+            <Icon.NavigateBefore size={3} role="presentation" />
           </button>
           <p className="font-body-sm text-bold text-uppercase text-base margin-0">
             Sources

@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Button, TextInput, FormGroup, Label } from '@trussworks/react-uswds';
+import { Button, TextInput, FormGroup, Label, Icon } from '@trussworks/react-uswds';
 import ReactMarkdown from 'react-markdown';
 
 const CopyLinkButton: React.FC<{ href: string }> = ({ href }) => {
@@ -66,7 +66,8 @@ const WELCOME_MESSAGE: Message = {
 1. **Embed:** Paste a YouTube video or playlist URL in the sidebar to extract transcripts and build the vector store.
 2. **Chat:** Once processing is complete, ask questions about the content and get cited answers with timestamps.
 
-> **Private/unlisted playlists:** Only supported when running locally (\`http://localhost\`). Requires Chrome with your Google account signed in. Not available on the hosted version.
+> **Private/unlisted playlists:** Only supported when running locally (\`http://localhost\`). Requires Chrome with your Google account signed in. Not available on the hosted/live version.
+ 
 > **Limits:** Up to 5 videos per playlist, 10 videos total.
 
 ---
@@ -204,10 +205,10 @@ export const ChatInterface: React.FC = () => {
         {isLoading && <div className="text-base-dark font-sans-xs">Assistant is thinking...</div>}
       </div>
 
-      <form onSubmit={handleSend}>
+      <form onSubmit={handleSend} style={{ paddingBottom: 'calc(env(safe-area-inset-bottom, 0px) + 1.5rem)' }}>
         <FormGroup>
           <Label htmlFor="chat-input" className="usa-sr-only">Message</Label>
-          <div className="display-flex">
+          <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: '0.5rem' }}>
             <TextInput
               id="chat-input"
               name="chat-input"
@@ -217,10 +218,10 @@ export const ChatInterface: React.FC = () => {
               onChange={(e) => setInput(e.target.value)}
               disabled={isLoading}
               placeholder="Type your question..."
-              className="flex-1 margin-right-1"
+              style={{ flex: '1 1 200px', maxWidth: 'none', minWidth: 0 }}
             />
-            <Button type="submit" disabled={isLoading || !input.trim()}>
-              Send
+            <Button type="submit" disabled={isLoading || !input.trim()} style={{ padding: '0.5rem', minWidth: 'auto', display: 'flex', alignItems: 'center', flexShrink: 0 }} aria-label="Send">
+              <Icon.Send size={3} role="presentation" />
             </Button>
           </div>
         </FormGroup>

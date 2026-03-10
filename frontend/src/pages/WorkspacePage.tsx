@@ -23,6 +23,16 @@ export const WorkspacePage = () => {
   const toggleSidebar = useCallback(() => setSidebarOpen((prev) => !prev), []);
 
   useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth >= 768) {
+        setSidebarOpen(true);
+      }
+    };
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
+  useEffect(() => {
     fetch('/api/v1/sources')
       .then((res) => res.json())
       .then((data: Array<{ source_url: string; source_title: string; source_type: string; video_count: number }>) => {
@@ -150,7 +160,7 @@ export const WorkspacePage = () => {
             style={{ alignSelf: 'flex-start' }}
             title="Show sources"
           >
-            <Icon.NavigateNext size={3} />
+            <Icon.NavigateNext size={3} role="presentation" />
             Sources
           </button>
         )}
