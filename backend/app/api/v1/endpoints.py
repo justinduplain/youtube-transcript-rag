@@ -74,7 +74,18 @@ async def ingest_url(request: IngestRequest, background_tasks: BackgroundTasks):
     if not video_ids:
         raise HTTPException(status_code=400, detail="Could not extract video IDs from URL")
 
-    video_ids = video_ids[:10]
+    video_ids = video_ids[:5]
+
+    GLOBAL_VIDEO_LIMIT = 10
+    already_indexed = indexing_service.get_indexed_video_ids()
+    # Exclude already-indexed videos and enforce the global cap
+    new_video_ids = [v for v in video_ids if v not in already_indexed]
+    remaining_capacity = GLOBAL_VIDEO_LIMIT - len(already_indexed)
+    if remaining_capacity <= 0:
+        raise HTTPException(status_code=400, detail=f"Video limit reached ({GLOBAL_VIDEO_LIMIT} videos max). Clear existing sources to add more.")
+    video_ids = new_video_ids[:remaining_capacity]
+    if not video_ids:
+        raise HTTPException(status_code=400, detail="All videos in this playlist are already indexed.")
 
     job_id = str(uuid.uuid4())
     total = len(video_ids)

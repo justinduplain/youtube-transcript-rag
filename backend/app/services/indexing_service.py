@@ -90,6 +90,11 @@ class IndexingService:
 
         return index
 
+    def get_indexed_video_ids(self) -> set:
+        """Returns the set of unique video IDs currently in the index."""
+        result = self.chroma_collection.get(include=["metadatas"])
+        return {m.get("video_id") for m in result["metadatas"] if m.get("video_id")}
+
     def clear_all(self):
         """Clears all indexed data from ChromaDB and docstore."""
         self.db.delete_collection(self.collection_name)

@@ -135,7 +135,7 @@ export const WorkspacePage = () => {
         statusMessage={statusMessage}
         onClearAll={handleClearAll}
       />
-      <div className="flex-1 overflow-y-auto padding-4">
+      <div className="flex-1 display-flex flex-column overflow-hidden padding-4">
         <ChatInterface key={chatKey} />
       </div>
     </main>
