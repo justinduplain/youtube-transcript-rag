@@ -22,7 +22,7 @@ A Retrieval-Augmented Generation (RAG) system that allows you to "chat" with You
 - **Core:** FastAPI, Python 3.12+, Poetry
 - **Orchestration:** LlamaIndex
 - **Vector Store:** ChromaDB (local)
-- **Models:** OpenAI `gpt-4o-mini` (LLM) and `text-embedding-3-small` (Embeddings)
+- **Models:** Google Gemini `gemini-2.5-flash` (LLM) and OpenAI `text-embedding-3-small` (Embeddings)
 - **Extraction:** `yt-dlp` and `youtube-transcript-api`
 
 ## Getting Started
@@ -30,7 +30,11 @@ A Retrieval-Augmented Generation (RAG) system that allows you to "chat" with You
 ### Prerequisites
 - Node.js (v18+)
 - Python 3.12+ with [Poetry](https://python-poetry.org/)
-- OpenAI API Key
+- OpenAI API Key (embeddings)
+- Google API Key (LLM) — get one at [Google AI Studio](https://aistudio.google.com/)
+- **Webshare rotating residential proxy** — required to fetch transcripts without being IP-blocked by YouTube. Purchase a "Residential" package (not "Proxy Server" or "Static Residential") at [Webshare](https://www.webshare.io/). See the [youtube-transcript-api docs](https://github.com/jdepoix/youtube-transcript-api#working-around-ip-bans) for background on why this is necessary*. 
+  - *Adittionally, `youtube-transcript-api` can be configured to be used without a proxy, see the above docs for details.
+- **Google Chrome** — required for ingesting private or age-restricted videos (the backend uses your local browser cookies for authentication)
 
 ### 1. Setup Backend
 
@@ -48,6 +52,7 @@ Edit `backend/.env`:
 
 ```env
 OPENAI_API_KEY=your_openai_api_key
+GOOGLE_API_KEY=your_google_api_key
 
 # Optional: use local browser cookies to access age-restricted or private content
 YOUTUBE_SOURCE_BROWSER=chrome

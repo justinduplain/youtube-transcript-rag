@@ -1,6 +1,6 @@
 from fastapi import APIRouter, HTTPException, BackgroundTasks
-from pydantic import BaseModel
-from typing import Optional, List
+from pydantic import BaseModel, Field
+from typing import Optional, List, Literal
 from app.services.yt_dlp_service import YtDlpService
 from app.services.transcript_service import TranscriptService
 from app.services.indexing_service import IndexingService
@@ -57,12 +57,12 @@ class IngestRequest(BaseModel):
     url: str
 
 class Message(BaseModel):
-    role: str
-    content: str
+    role: Literal["user", "assistant"]
+    content: str = ""
 
 class ChatRequest(BaseModel):
     message: str
-    history: List[Message] = []
+    history: List[Message] = Field(default_factory=list)
 
 @router.post("/ingest")
 async def ingest_url(request: IngestRequest, background_tasks: BackgroundTasks):
@@ -153,7 +153,7 @@ async def clear_sources():
     return {"message": "All sources cleared."}
 
 @router.post("/chat")
-async def chat(request: ChatRequest):
+def chat(request: ChatRequest):
     """
     Queries the indexed transcripts with conversation context.
     """
@@ -166,8 +166,12 @@ async def chat(request: ChatRequest):
     try:
         # Convert Pydantic messages to LlamaIndex ChatMessages
         chat_history = [
-            ChatMessage(role=MessageRole.USER if m.role == 'user' else MessageRole.ASSISTANT, content=m.content)
+            ChatMessage(
+                role=MessageRole.USER if m.role == "user" else MessageRole.ASSISTANT,
+                content=m.content.strip(),
+            )
             for m in request.history
+            if m.content and m.content.strip()
         ]
         
         chat_engine = retrieval_service.get_chat_engine()
@@ -176,13 +180,13 @@ async def chat(request: ChatRequest):
         clean_answer, declared_video_ids = parse_structured_response(str(response))
         declared_set = set(declared_video_ids)
 
-        # Build sources only for video_ids the LLM declared it used
+        # Build sources: filter by declared video_ids when available, otherwise show all retrieved nodes
         raw_sources = []
         for node in response.source_nodes:
             metadata = node.node.metadata
             vid = metadata.get("video_id")
 
-            if not declared_set or vid not in declared_set:
+            if declared_set and vid not in declared_set:
                 continue
 
             content = node.node.get_content()
@@ -203,15 +207,25 @@ async def chat(request: ChatRequest):
                 "score": node.score or 0
             })
 
-        # Deduplicate by video_id, preserve order, cap at 3
-        seen_video_ids: set = set()
+        # Sort by score descending
+        raw_sources.sort(key=lambda s: s["score"], reverse=True)
+
+        # Drop sources scoring below 70% of the top score (relative threshold)
+        SCORE_THRESHOLD = 0.7
+        if raw_sources:
+            top_score = raw_sources[0]["score"]
+            cutoff = top_score * SCORE_THRESHOLD
+            raw_sources = [s for s in raw_sources if s["score"] >= cutoff]
+
+        # Deduplicate by timestamp (video_id + timestamp_sec), cap at 5
+        seen_timestamps: set = set()
         sources = []
         for s in raw_sources:
-            vid = s["video_id"]
-            if vid not in seen_video_ids:
-                seen_video_ids.add(vid)
+            key = (s["video_id"], s["url"])
+            if key not in seen_timestamps:
+                seen_timestamps.add(key)
                 sources.append(s)
-            if len(sources) == 3:
+            if len(sources) == 5:
                 break
 
         return {

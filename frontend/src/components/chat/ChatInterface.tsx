@@ -12,6 +12,28 @@ interface Message {
   sources?: Source[];
 }
 
+interface ChatApiResponse {
+  answer?: string;
+  sources?: Source[];
+  detail?: unknown;
+}
+
+const sanitizeHistory = (history: Message[]) =>
+  history
+    .filter((m) => typeof m.content === 'string' && m.content.trim().length > 0)
+    .map(({ role, content }) => ({ role, content }));
+
+const extractErrorDetail = (detail: unknown): string => {
+  if (typeof detail === 'string' && detail.trim()) return detail;
+  if (Array.isArray(detail) && detail.length > 0) {
+    const first = detail[0];
+    if (first && typeof first === 'object' && 'msg' in first && typeof first.msg === 'string') {
+      return first.msg;
+    }
+  }
+  return '';
+};
+
 export const ChatInterface: React.FC = () => {
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState('');
@@ -24,9 +46,10 @@ export const ChatInterface: React.FC = () => {
 
   const handleSend = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!input.trim()) return;
+    const trimmedInput = input.trim();
+    if (!trimmedInput) return;
 
-    const userMsg: Message = { role: 'user', content: input };
+    const userMsg: Message = { role: 'user', content: trimmedInput };
     const newHistory = [...messages, userMsg]; // Current history + new message
     setMessages(newHistory);
     setInput('');
@@ -37,22 +60,31 @@ export const ChatInterface: React.FC = () => {
       const response = await fetch('http://localhost:8000/api/v1/chat', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ 
-          message: input,
-          history: messages // Send previous messages as context
+        body: JSON.stringify({
+          message: trimmedInput,
+          history: sanitizeHistory(messages)
         }),
       });
 
-      const data = await response.json();
+      const data: ChatApiResponse = await response.json();
+      if (!response.ok) {
+        const detail = extractErrorDetail(data.detail);
+        throw new Error(detail || `Request failed with status ${response.status}`);
+      }
+      if (typeof data.answer !== 'string' || !data.answer.trim()) {
+        throw new Error('Assistant returned an empty response.');
+      }
+
       const assistantMsg: Message = {
         role: 'assistant',
         content: data.answer,
-        sources: data.sources
+        sources: Array.isArray(data.sources) ? data.sources : []
       };
       setMessages(prev => [...prev, assistantMsg]);
     } catch (error) {
       console.error('Chat failed:', error);
-      setMessages(prev => [...prev, { role: 'assistant', content: 'Sorry, I encountered an error.' }]);
+      const message = error instanceof Error ? error.message : 'Unknown error';
+      setMessages(prev => [...prev, { role: 'assistant', content: `Sorry, I encountered an error: ${message}` }]);
     } finally {
       setIsLoading(false);
     }
