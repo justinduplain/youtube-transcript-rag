@@ -8,7 +8,8 @@ Hybrid BM25 + vector retrieval with Reciprocal Rank Fusion, parent-child indexin
 
 ## Architecture
 
-```mermaid flowchart LR
+```mermaid
+flowchart LR
     A[YouTube URL] --> B[yt-dlp\nResolution]
     B --> C[Transcript Fetch\n+ Rotating Proxy]
     C --> D[Parent-Child\nChunking]
