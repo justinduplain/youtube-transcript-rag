@@ -86,42 +86,33 @@ function App() {
 
         <div className="usa-prose">
           <p>
-            A Retrieval-Augmented Generation (RAG) system that lets you chat with YouTube videos.
-            Paste a video or playlist URL, and ask questions with answers cited to the exact second.
+            Paste a YouTube video or playlist URL, and this app will pull the transcript, index it,
+            and let you ask questions about it. Every answer includes clickable timestamps that jump
+            to the exact moment in the video, so you can verify anything the AI tells you.
           </p>
 
-          <h4>Ingestion</h4>
+          <h4>How it works</h4>
           <p>
-            <strong>yt-dlp</strong> resolves video and playlist URLs.{' '}
-            <strong>youtube-transcript-api</strong> fetches transcripts, with rotating residential proxy
-            support for cloud deployments where YouTube blocks datacenter IPs.
+            When you submit a URL, the backend fetches the transcript and splits it into
+            overlapping chunks at two levels: small pieces for accurate search, and larger
+            surrounding context for the AI to read. Your questions are searched against both
+            a keyword index and a meaning-based index at the same time, and the best results
+            from both are combined before the AI writes its answer.
           </p>
 
-          <h4>Indexing</h4>
+          <h4>Why timestamps matter</h4>
           <p>
-            Transcripts are split using a <strong>parent-child chunking</strong> strategy: small chunks
-            (256 tokens) for precise matching, larger parent chunks (1,024 tokens) for LLM context.
-            Embeddings are generated with OpenAI <code>text-embedding-3-small</code> and stored
-            in <strong>ChromaDB</strong>.
+            Each citation links to the exact second in the source video. Click any timestamp
+            in an answer to watch the original moment yourself. This is what makes it a
+            research tool instead of just another chatbot.
           </p>
 
-          <h4>Retrieval</h4>
+          <h4>Built with</h4>
           <p>
-            Queries run through <strong>hybrid search</strong>: semantic vector search plus BM25 keyword
-            search, fused via <strong>Reciprocal Rank Fusion (RRF)</strong> for high-precision results.
-          </p>
-
-          <h4>Generation</h4>
-          <p>
-            Google <strong>Gemini 2.5 Flash</strong> synthesizes answers from retrieved context, with
-            timestamped citations that link directly to the source video.
-          </p>
-
-          <h4>Tech Stack</h4>
-          <p>
-            <strong>Frontend:</strong> React, Vite, TypeScript, USWDS (U.S. Web Design System)<br />
-            <strong>Backend:</strong> FastAPI, LlamaIndex, ChromaDB, Python<br />
-            <strong>Models:</strong> OpenAI (embeddings), Google Gemini (LLM)
+            <strong>Frontend:</strong> React 19, TypeScript, USWDS (U.S. Web Design System)<br />
+            <strong>Backend:</strong> FastAPI, Python, LlamaIndex, ChromaDB<br />
+            <strong>AI:</strong> Google Gemini (answers), OpenAI (search embeddings)<br />
+            <strong>Deployed on:</strong> AWS EC2 with nginx
           </p>
         </div>
 

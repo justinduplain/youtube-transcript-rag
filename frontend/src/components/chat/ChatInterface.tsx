@@ -63,12 +63,10 @@ const WELCOME_MESSAGE: Message = {
 
 ### Getting Started
 
-1. **Embed:** Paste a YouTube video or playlist URL in the sidebar to extract transcripts and build the vector store.
-2. **Chat:** Once processing is complete, ask questions about the content and get cited answers with timestamps.
+1. **Add a full playlist or just one video:** Paste a YouTube video or playlist URL in the sidebar to pull transcripts and have them indexed.
+2. **Ask questions:** Once processing is complete, ask anything about the content. Answers will include cited timestamps you can click to verify.
 
-> **Private/unlisted playlists:** Only supported when running locally (\`http://localhost\`). Requires Chrome with your Google account signed in. Not available on the hosted/live version.
- 
-> **Limits:** Up to 5 videos per playlist, 10 videos total.
+> **Limits:** Up to 5 videos per playlist, 10 videos total. Private/unlisted playlists are only supported when running locally.
 
 ---
 
