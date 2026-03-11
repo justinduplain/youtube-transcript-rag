@@ -13,12 +13,14 @@ flowchart LR
     A[YouTube URL] --> B[yt-dlp Resolution]
     B --> C[Transcript Fetch + Proxy]
     C --> D[Parent-Child Chunking]
-    D --> E[ChromaDB Vector Index]
-    D --> F[BM25 Keyword Index]
-    E --> G[Reciprocal Rank Fusion]
-    F --> G
-    G --> H[Gemini 2.5 Flash]
-    H --> I[Cited Response w/ Timestamps]
+    D --> E[OpenAI Embeddings]
+    E --> F[ChromaDB Vector Index]
+    D --> G[BM25 Keyword Index]
+    H[User Query] --> I[Reciprocal Rank Fusion]
+    F --> I
+    G --> I
+    I --> J[Gemini 2.5 Flash Synthesis]
+    J --> K[Cited Response w/ Timestamps]
 ```
 
 1. **Ingestion:** User submits a YouTube video or playlist URL. `yt-dlp` resolves it to individual video IDs, and `youtube-transcript-api` fetches transcripts (routed through a rotating residential proxy on cloud deployments to avoid YouTube IP bans).
