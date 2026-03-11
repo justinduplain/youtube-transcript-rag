@@ -10,15 +10,15 @@ Hybrid BM25 + vector retrieval with Reciprocal Rank Fusion, parent-child indexin
 
 ```mermaid
 flowchart LR
-    A[YouTube URL] --> B[yt-dlp\nResolution]
-    B --> C[Transcript Fetch\n+ Rotating Proxy]
-    C --> D[Parent-Child\nChunking]
-    D --> E[ChromaDB\nVector Index]
-    D --> F[BM25\nKeyword Index]
-    E --> G[Reciprocal Rank\nFusion]
+    A[YouTube URL] --> B[yt-dlp Resolution]
+    B --> C[Transcript Fetch + Proxy]
+    C --> D[Parent-Child Chunking]
+    D --> E[ChromaDB Vector Index]
+    D --> F[BM25 Keyword Index]
+    E --> G[Reciprocal Rank Fusion]
     F --> G
-    G --> H[LLM Synthesis\nGemini 2.5 Flash]
-    H --> I[Cited Response\nw/ Timestamps]
+    G --> H[Gemini 2.5 Flash]
+    H --> I[Cited Response w/ Timestamps]
 ```
 
 1. **Ingestion:** User submits a YouTube video or playlist URL. `yt-dlp` resolves it to individual video IDs, and `youtube-transcript-api` fetches transcripts (routed through a rotating residential proxy on cloud deployments to avoid YouTube IP bans).
