@@ -6,10 +6,11 @@ interface UrlIngestionFormProps {
   onSubmit: (url: string) => void;
   isLoading?: boolean;
   statusMessage?: string;
+  statusIsError?: boolean;
   compact?: boolean;
 }
 
-export const UrlIngestionForm = ({ onSubmit, isLoading = false, statusMessage, compact = false }: UrlIngestionFormProps) => {
+export const UrlIngestionForm = ({ onSubmit, isLoading = false, statusMessage, statusIsError = false, compact = false }: UrlIngestionFormProps) => {
   const [url, setUrl] = useState('');
   const [error, setError] = useState<string | undefined>(undefined);
 
@@ -49,7 +50,9 @@ export const UrlIngestionForm = ({ onSubmit, isLoading = false, statusMessage, c
         </div>
       </div>
       {statusMessage && (
-        <p className="text-base font-body-sm margin-top-1 margin-bottom-0">
+        <p
+          className={`${statusIsError ? 'usa-error-message' : 'text-base'} font-body-sm margin-top-1 margin-bottom-0`}
+        >
           {statusMessage}
         </p>
       )}

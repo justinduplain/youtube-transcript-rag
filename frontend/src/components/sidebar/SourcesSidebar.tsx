@@ -9,6 +9,7 @@ interface SourcesSidebarProps {
   onIngest: (url: string) => void;
   ingestLoading: boolean;
   statusMessage?: string;
+  statusIsError?: boolean;
   onClearAll: () => void;
   onCollapse: () => void;
 }
@@ -32,6 +33,7 @@ export const SourcesSidebar = ({
   onIngest,
   ingestLoading,
   statusMessage,
+  statusIsError,
   onClearAll,
   onCollapse,
 }: SourcesSidebarProps) => {
@@ -43,13 +45,13 @@ export const SourcesSidebar = ({
       <div className="display-flex flex-align-center flex-justify margin-bottom-2 margin-top-1">
         <div className="display-flex flex-align-center">
           <button
-            className="usa-button usa-button--unstyled text-base margin-right-05"
+            className="usa-button usa-button--unstyled text-base-dark margin-right-05"
             onClick={onCollapse}
             title="Collapse sidebar"
           >
-            <Icon.NavigateBefore size={3} role="presentation" />
+            <Icon.ExpandMore size={3} role="presentation" />
           </button>
-          <p className="font-body-sm text-bold text-uppercase text-base margin-0">
+          <p className="font-body-sm text-bold text-uppercase text-base-dark margin-0">
             Sources
           </p>
         </div>
@@ -68,6 +70,7 @@ export const SourcesSidebar = ({
           onSubmit={onIngest}
           isLoading={ingestLoading}
           statusMessage={statusMessage}
+          statusIsError={statusIsError}
           compact
         />
       ) : (
@@ -100,6 +103,7 @@ export const SourcesSidebar = ({
               onSubmit={onIngest}
               isLoading={ingestLoading}
               statusMessage={statusMessage}
+              statusIsError={statusIsError}
               compact
             />
           ) : (

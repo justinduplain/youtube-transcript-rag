@@ -2,6 +2,8 @@
 
 A Retrieval-Augmented Generation (RAG) system that allows you to "chat" with YouTube videos. This project serves as both a functional search tool and an educational sandbox for the **U.S. Web Design System (USWDS)**, focusing on **USWDS compliance**, **Section 508 Accessibility**, and **Design Tokens**.
 
+**Live Demo:** [ytrag.justinduplain.com](https://ytrag.justinduplain.com)
+
 ## Key Features
 
 - **Zero-Trust Research:** Citations link directly to the exact second in the video (e.g., `[04:23]`), allowing for instant verification of AI-generated answers.

@@ -16,6 +16,7 @@ export const WorkspacePage = () => {
   const [isAddingMore, setIsAddingMore] = useState(false);
   const [ingestLoading, setIngestLoading] = useState(false);
   const [statusMessage, setStatusMessage] = useState<string | undefined>();
+  const [statusIsError, setStatusIsError] = useState(false);
   const [chatKey, setChatKey] = useState(0);
   const [sidebarOpen, setSidebarOpen] = useState(window.innerWidth >= 768);
   const pollRef = useRef<ReturnType<typeof setInterval> | null>(null);
@@ -55,6 +56,7 @@ export const WorkspacePage = () => {
     if (pollRef.current) clearInterval(pollRef.current);
     setIngestLoading(true);
     setStatusMessage('Uploading...');
+    setStatusIsError(false);
 
     const newSource: IngestionSource = {
       url,
@@ -72,7 +74,12 @@ export const WorkspacePage = () => {
         body: JSON.stringify({ url }),
       });
 
-      if (!response.ok) throw new Error('Ingestion failed');
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => null);
+        const detail = errorData?.detail ?? '';
+        const isDuplicate = detail.includes('already indexed');
+        throw Object.assign(new Error(detail || 'Ingestion failed'), { isDuplicate });
+      }
 
       const data = await response.json();
       const total: number = data.video_ids?.length ?? 0;
@@ -117,11 +124,19 @@ export const WorkspacePage = () => {
       }, 1500);
     } catch (error) {
       console.error('Ingestion error:', error);
-      setStatusMessage('Failed to start ingestion. Make sure the backend is running.');
+      const isDuplicate = error instanceof Error && (error as Error & { isDuplicate?: boolean }).isDuplicate;
+      setStatusIsError(true);
+      if (isDuplicate) {
+        alert('Import cancelled: playlist/video source already exists.');
+        setStatusMessage('Import cancelled: playlist/video source already exists.');
+        setSources((prev) => prev.filter((s) => !(s.url === url && s.status === 'processing')));
+      } else {
+        setStatusMessage('Failed to start ingestion. Make sure the backend is running.');
+        setSources((prev) =>
+          prev.map((s) => (s.url === url && s.status === 'processing' ? { ...s, status: 'error' } : s))
+        );
+      }
       setIngestLoading(false);
-      setSources((prev) =>
-        prev.map((s) => (s.url === url ? { ...s, status: 'error' } : s))
-      );
     }
   };
 
@@ -148,6 +163,7 @@ export const WorkspacePage = () => {
           onIngest={handleIngest}
           ingestLoading={ingestLoading}
           statusMessage={statusMessage}
+          statusIsError={statusIsError}
           onClearAll={handleClearAll}
           onCollapse={toggleSidebar}
         />
@@ -155,12 +171,12 @@ export const WorkspacePage = () => {
       <div className="flex-1 display-flex flex-column overflow-hidden padding-4">
         {!sidebarOpen && (
           <button
-            className="usa-button usa-button--unstyled font-body-xs margin-bottom-1 display-flex flex-align-center"
+            className="usa-button usa-button--unstyled font-body-sm text-bold text-uppercase text-base-dark margin-bottom-1 display-flex flex-align-center"
             onClick={toggleSidebar}
             style={{ alignSelf: 'flex-start' }}
             title="Show sources"
           >
-            <Icon.NavigateNext size={3} role="presentation" />
+            <Icon.ExpandLess size={3} role="presentation" />
             Sources
           </button>
         )}
