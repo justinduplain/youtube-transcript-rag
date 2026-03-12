@@ -56,17 +56,24 @@ interface ChatApiResponse {
   detail?: unknown;
 }
 
-const WELCOME_MESSAGE: Message = {
-  role: 'assistant',
-  isWelcome: true,
-  content: `## Welcome to YouTube Transcript RAG!
+const buildWelcomeMessage = (limits?: { playlist_limit: number | null; global_limit: number }): Message => {
+  const limitsText = limits
+    ? limits.playlist_limit
+      ? `Up to ${limits.playlist_limit} videos per playlist, ${limits.global_limit} videos total.`
+      : `Up to ${limits.global_limit} videos total.`
+    : 'Loading limits...';
+
+  return {
+    role: 'assistant',
+    isWelcome: true,
+    content: `## Welcome to YouTube Transcript RAG!
 
 ### Getting Started
 
 1. **Add a full playlist or just one video:** Paste a YouTube video or playlist URL in the sidebar to pull transcripts and have them indexed.
 2. **Ask questions:** Once processing is complete, ask anything about the content. Answers will include cited timestamps you can click to verify.
 
-> **Limits:** Up to 5 videos per playlist, 10 videos total. Private/unlisted playlists are only supported when running locally.
+> **Limits:** ${limitsText} Private/unlisted playlists are only supported when running locally.
 
 ---
 
@@ -89,6 +96,7 @@ const WELCOME_MESSAGE: Message = {
 - What is the best exercise for heart health?
 - What is some practical guidance to stay heart healthy?
 - What does recent research say is the most effective way to maintain heart health?`,
+  };
 };
 
 const sanitizeHistory = (history: Message[]) =>
@@ -108,11 +116,20 @@ const extractErrorDetail = (detail: unknown): string => {
 };
 
 export const ChatInterface: React.FC = () => {
-  const [messages, setMessages] = useState<Message[]>([WELCOME_MESSAGE]);
+  const [messages, setMessages] = useState<Message[]>([buildWelcomeMessage()]);
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const lastMsgRef = useRef<HTMLDivElement>(null);
   const scrollContainerRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    fetch('/api/v1/limits')
+      .then(res => res.json())
+      .then(data => {
+        setMessages(prev => prev.map(m => m.isWelcome ? buildWelcomeMessage(data) : m));
+      })
+      .catch(() => {});
+  }, []);
 
   useEffect(() => {
     if (lastMsgRef.current && scrollContainerRef.current) {

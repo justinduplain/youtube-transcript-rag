@@ -15,6 +15,11 @@ logger = logging.getLogger(__name__)
 
 router = APIRouter()
 
+# Video limits based on environment
+_is_local = os.getenv("ENVIRONMENT", "production") == "local"
+PLAYLIST_LIMIT = None if _is_local else 5
+GLOBAL_VIDEO_LIMIT = 25 if _is_local else 10
+
 # In-memory job status store
 jobs: dict = {}
 
@@ -74,9 +79,8 @@ async def ingest_url(request: IngestRequest, background_tasks: BackgroundTasks):
     if not video_ids:
         raise HTTPException(status_code=400, detail="Could not extract video IDs from URL")
 
-    video_ids = video_ids[:5]
-
-    GLOBAL_VIDEO_LIMIT = 10
+    if PLAYLIST_LIMIT:
+        video_ids = video_ids[:PLAYLIST_LIMIT]
     already_indexed = indexing_service.get_indexed_video_ids()
     # Exclude already-indexed videos and enforce the global cap
     new_video_ids = [v for v in video_ids if v not in already_indexed]
@@ -148,6 +152,14 @@ async def ingest_status(job_id: str):
     if job_id not in jobs:
         raise HTTPException(status_code=404, detail="Job not found")
     return jobs[job_id]
+
+@router.get("/limits")
+async def get_limits():
+    """Returns the current video limits based on environment."""
+    return {
+        "playlist_limit": PLAYLIST_LIMIT,
+        "global_limit": GLOBAL_VIDEO_LIMIT,
+    }
 
 @router.get("/sources")
 async def list_sources():
