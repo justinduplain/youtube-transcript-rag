@@ -1,27 +1,20 @@
 # YouTube Transcript RAG
 
-A RAG pipeline for conversational video search that covers full playlists (not just a single video). 
+A RAG pipeline for conversational video search that covers full playlists (not just a single video).
 
 Hybrid BM25 + vector retrieval with Reciprocal Rank Fusion, parent-child indexing, and timestamp-level citations. Built on FastAPI + LlamaIndex + ChromaDB with a React 19 / USWDS frontend meeting Section 508 accessibility standards. Deployed on AWS EC2.
 
 **Live Demo:** [ytrag.justinduplain.com](https://ytrag.justinduplain.com)
 
+![YouTube Transcript RAG application screenshot](assets/readme-app-screenshot.png)
+
+## Why I Built This
+
+I save a lot of YouTube videos for research and reference: vehicle and home maintenance, health and fitness, learning new technologies. These are from people and channels I trust, and over time the playlists grow long. When I need to check something specific, I don't want to scrub through dozens of videos hoping to find the right 30-second segment buried in an hour of content. This application solves that problem. Add a playlist, wait a few minutes for it to index, ask your question, and get a direct answer with citations that link to the exact moment in the source video.
+
 ## Architecture
 
-```mermaid
-flowchart LR
-    A[YouTube URL] --> B[yt-dlp Resolution]
-    B --> C[Transcript Fetch + Proxy]
-    C --> D[Parent-Child Chunking]
-    D --> E[OpenAI Embeddings]
-    E --> F[ChromaDB Vector Index]
-    D --> G[BM25 Keyword Index]
-    H[User Query] --> I[Reciprocal Rank Fusion]
-    F --> I
-    G --> I
-    I --> J[Gemini 2.5 Flash Synthesis]
-    J --> K[Cited Response w/ Timestamps]
-```
+![Architecture flowchart](assets/readme-flow-chart.png)
 
 1. **Ingestion:** User submits a YouTube video or playlist URL. `yt-dlp` resolves it to individual video IDs, and `youtube-transcript-api` fetches transcripts (routed through a rotating residential proxy on cloud deployments to avoid YouTube IP bans).
 2. **Indexing:** Transcripts are split into parent nodes (1024 tokens) and child nodes (256 tokens). Child nodes are embedded and stored in ChromaDB for precise retrieval. Parent nodes are stored alongside them for context. Metadata is excluded from embeddings so only transcript text is semantically indexed.
@@ -31,25 +24,27 @@ flowchart LR
 ## Engineering Decisions & Trade-offs
 
 ### Hybrid BM25 + Vector Retrieval (RRF)
-Pure vector search degrades on precise terminology and proper nouns. BM25 handles lexical precision; vector handles semantic similarity. RRF fuses both rankings without requiring score normalization, chosen over weighted averaging because it's robust to score distribution differences between retrievers.
+Pure vector search degrades on precise terminology and proper nouns. BM25 handles lexical precision; vector handles semantic similarity. RRF fuses both rankings without requiring score normalization. I chose it over weighted averaging because it is robust to score distribution differences between retrievers.
 
 ### Parent-Child Indexing over Fixed Chunking
-Fixed-size chunks force a trade-off: small chunks retrieve precisely but starve the LLM of context, large chunks give context but dilute retrieval signal. Parent-child indexing sidesteps this. Small child nodes (256 tokens) drive retrieval precision, and their corresponding parent nodes (1024 tokens) provide the LLM with enough surrounding context for coherent synthesis. I tuned these sizes iteratively against real transcript data.
+Fixed-size chunks force a trade-off: small chunks retrieve precisely but starve the LLM of context, while large chunks give context but dilute retrieval signal. Parent-child indexing sidesteps this entirely. Small child nodes (256 tokens) drive retrieval precision, and their corresponding parent nodes (1024 tokens) provide the LLM with enough surrounding context for coherent synthesis. I tuned these sizes iteratively against real transcript data.
 
 ### ChromaDB over Pinecone / pgvector
 ChromaDB runs locally with zero infrastructure dependencies. For a single-server deployment, it eliminates network latency on vector lookups and keeps the entire pipeline self-contained. Pinecone would add a managed service cost and an external dependency for a workload that doesn't need distributed vector search. pgvector would work, but ChromaDB's native LlamaIndex integration made it the faster path to a working pipeline.
 
 ### Gemini for Generation + OpenAI for Embeddings
-Gemini 2.5 Flash offers strong synthesis quality at low cost for generation. OpenAI's `text-embedding-3-small` remains a top performer for retrieval-quality embeddings at its price point. Using separate providers for generation and embeddings lets me optimize cost and quality independently rather than being locked into a single vendor's strengths and weaknesses.
+Gemini 2.5 Flash offers strong synthesis quality at low cost for generation. OpenAI's `text-embedding-3-small` remains a top performer for retrieval-quality embeddings at its price point. Using separate providers for generation and embeddings lets me optimize cost and quality independently rather than being locked into a single vendor.
 
 ### Metadata Exclusion from Embeddings
-Video titles, channel names, and timestamps are stored as metadata but excluded from the embedding input. This prevents metadata tokens from polluting the semantic space. A query about "machine learning" shouldn't get a relevance boost just because a video title contains that phrase. The index searches transcript content only.
+Video titles, channel names, and timestamps are stored as metadata but excluded from the embedding input. This prevents metadata tokens from polluting the semantic space. A query about "machine learning" should not get a relevance boost just because a video title contains that phrase. The index searches transcript content only.
 
 ### Timestamp-Level Citations
-Every claim in a generated answer links to the exact second in the source video. This isn't a nice-to-have; it's the core value proposition. If a user can't verify what the AI says, the system is just another chatbot. The citation architecture makes it a research tool.
+Every claim in a generated answer links to the exact second in the source video. This is not a nice-to-have. It is the core value proposition. If a user can't verify what the AI says, the system is just another chatbot. The citation architecture makes it a research tool.
+
+![Citations with timestamp links](assets/readme-citations-screenshot.png)
 
 ### USWDS + Section 508 Accessibility
-The frontend is built with @trussworks/react-uswds, Tailwind CSS, and a three-tier design token system (Base, Semantic, Component) via Style Dictionary v5. Section 508 accessibility is validated automatically with Vitest-Axe. This wasn't cosmetic. Building against federal design standards forced disciplined component architecture and real accessibility testing, not just aria-label spot checks.
+The frontend is built with the U.S. Web Design System (@trussworks/react-uswds), Tailwind CSS, and a three-tier design token system (Base, Semantic, Component) via Style Dictionary v5. Section 508 accessibility is validated automatically with Vitest-Axe. This was not cosmetic. Building against federal design standards forced disciplined component architecture and thorough accessibility testing from the start, not as an afterthought.
 
 ## Tech Stack
 
@@ -87,10 +82,10 @@ The biggest production challenge was YouTube's aggressive IP blocking of cloud p
 - Node.js (v18+)
 - Python 3.12+ with [Poetry](https://python-poetry.org/)
 - OpenAI API Key (embeddings)
-- Google API Key (LLM) -- get one at [Google AI Studio](https://aistudio.google.com/)
-- **Webshare rotating residential proxy** -- required to fetch transcripts without being IP-blocked by YouTube. Purchase a "Residential" package (not "Proxy Server" or "Static Residential") at [Webshare](https://www.webshare.io/). See the [youtube-transcript-api docs](https://github.com/jdepoix/youtube-transcript-api#working-around-ip-bans) for background on why this is necessary.
+- Google API Key (LLM). Get one at [Google AI Studio](https://aistudio.google.com/).
+- **Webshare rotating residential proxy.** Required to fetch transcripts without being IP-blocked by YouTube. Purchase a "Residential" package (not "Proxy Server" or "Static Residential") at [Webshare](https://www.webshare.io/). See the [youtube-transcript-api docs](https://github.com/jdepoix/youtube-transcript-api#working-around-ip-bans) for background on why this is necessary.
   - *Additionally, `youtube-transcript-api` can be configured to be used without a proxy; see the above docs for details.*
-- **Google Chrome** -- required for ingesting private or age-restricted videos (the backend uses your local browser cookies for authentication)
+- **Google Chrome.** Required for ingesting private or age-restricted videos (the backend uses your local browser cookies for authentication).
 
 ### 1. Setup Backend
 
@@ -113,7 +108,7 @@ GOOGLE_API_KEY=your_google_api_key
 # Optional: use local browser cookies to access age-restricted or private content
 YOUTUBE_SOURCE_BROWSER=chrome
 
-# Optional but recommended for cloud deployments -- see Proxy section below
+# Optional but recommended for cloud deployments (see Proxy section below)
 WEBSHARE_PROXY_USERNAME=
 WEBSHARE_PROXY_PASSWORD=
 ```
