@@ -81,8 +81,13 @@ function App() {
         </div>
       </header>
 
-      <Modal ref={aboutModalRef} id="about-modal" isLarge>
-        <ModalHeading>About YouTube RAG Pipeline</ModalHeading>
+      <Modal
+        ref={aboutModalRef}
+        id="about-modal"
+        aria-labelledby="about-modal-heading"
+        isLarge
+      >
+        <ModalHeading id="about-modal-heading">About YouTube RAG Pipeline</ModalHeading>
 
         <div className="usa-prose">
           <p>
