@@ -1,8 +1,7 @@
 import os
 from typing import List
 from llama_index.core import VectorStoreIndex, StorageContext, Settings
-from llama_index.core.chat_engine import ContextChatEngine
-from llama_index.core.memory import ChatMemoryBuffer
+from llama_index.core.base.llms.types import ChatMessage, MessageRole
 from llama_index.llms.google_genai import GoogleGenAI
 from llama_index.embeddings.openai import OpenAIEmbedding
 from llama_index.core.retrievers import VectorIndexRetriever, AutoMergingRetriever
@@ -85,33 +84,52 @@ class RetrievalService:
         
         return query_engine
 
-    def get_chat_engine(self):
+    def query_with_citations(self, message: str, chat_history: list):
         """
-        Creates a ChatEngine that can handle conversation history.
+        Retrieves context chunks, labels them with letters, calls the LLM
+        directly, and returns the raw response plus the label-to-node mapping
+        so the caller can remap citations after post-processing.
         """
-        # Get the same retriever logic
         query_engine = self.get_query_engine()
-        
-        # Instantiate ContextChatEngine directly
-        # This avoids the conflict where index.as_chat_engine() tries to create its own retriever
-        chat_engine = ContextChatEngine.from_defaults(
-            retriever=query_engine.retriever,
-            llm=Settings.llm,
-            memory=ChatMemoryBuffer.from_defaults(token_limit=3000),
-            system_prompt=(
-                "You are a helpful YouTube assistant. "
-                "Answer questions based ONLY on the provided context from video transcripts. "
-                "If the answer is not in the context, say you don't know.\n\n"
-                "You MUST format your response EXACTLY as follows — no exceptions:\n"
-                "ANSWER: <your answer text here, no URLs, no video titles, no source references>\n"
-                "USED_VIDEOS: <comma-separated list of video_id values you actually used, or 'none'>\n\n"
-                "The video_id for each context chunk is in its metadata. "
-                "Only list video_ids from chunks you genuinely drew upon. "
-                "Do not add any text before 'ANSWER:' or after the USED_VIDEOS line."
+        nodes = query_engine.retriever.retrieve(message)
+
+        # Label each retrieved node: A, B, C, ...
+        label_to_node = {}
+        context_parts = []
+        for i, node_with_score in enumerate(nodes):
+            label = chr(65 + i)  # A-Z
+            label_to_node[label] = node_with_score
+            meta = node_with_score.node.metadata
+            text = node_with_score.node.get_content()
+            context_parts.append(
+                f"[Source {label}] (video_id: {meta.get('video_id')}, "
+                f"title: {meta.get('title')})\n{text}"
             )
+        context_str = "\n\n".join(context_parts)
+
+        system_prompt = (
+            "You are a helpful YouTube assistant. "
+            "Answer questions based ONLY on the provided context from video transcripts. "
+            "If the answer is not in the context, say you don't know.\n\n"
+            "CITATION RULES:\n"
+            "- When you use information from a source, cite it inline using its label, "
+            "e.g. [Source A], [Source B].\n"
+            "- Place citations at the end of the sentence or claim they support.\n"
+            "- You may cite multiple sources for one claim: [Source A][Source C]\n"
+            "- Only cite sources you actually used.\n\n"
+            "You MUST format your response EXACTLY as follows — no exceptions:\n"
+            "ANSWER: <your answer with inline [Source X] citations>\n"
+            "USED_VIDEOS: <comma-separated list of video_id values you actually used, or 'none'>\n\n"
+            "Do not add any text before 'ANSWER:' or after the USED_VIDEOS line.\n\n"
+            f"Context:\n{context_str}"
         )
-        
-        return chat_engine
+
+        messages = [ChatMessage(role=MessageRole.SYSTEM, content=system_prompt)]
+        messages.extend(chat_history)
+        messages.append(ChatMessage(role=MessageRole.USER, content=message))
+
+        response = Settings.llm.chat(messages)
+        return str(response), label_to_node
 
     def query(self, message: str):
         engine = self.get_query_engine()

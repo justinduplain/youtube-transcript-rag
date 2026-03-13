@@ -34,7 +34,7 @@ const markdownComponents = {
     if (label === 'Copy Playlist URL' && href) {
       return <CopyLinkButton href={href} />;
     }
-    return <a href={href} target="_blank" rel="noopener noreferrer">{children}</a>;
+    return <a href={href} target="_blank" rel="noopener noreferrer" className="text-primary hover:text-primary-dark">{children}</a>;
   },
 };
 
@@ -47,12 +47,14 @@ interface Message {
   role: 'user' | 'assistant';
   content: string;
   sources?: Source[];
+  citations?: Record<string, string>;
   isWelcome?: boolean;
 }
 
 interface ChatApiResponse {
   answer?: string;
   sources?: Source[];
+  citations?: Record<string, string>;
   detail?: unknown;
 }
 
@@ -174,7 +176,8 @@ export const ChatInterface: React.FC = () => {
       const assistantMsg: Message = {
         role: 'assistant',
         content: data.answer,
-        sources: Array.isArray(data.sources) ? data.sources : []
+        sources: Array.isArray(data.sources) ? data.sources : [],
+        citations: data.citations ?? {}
       };
       setMessages(prev => [...prev, assistantMsg]);
     } catch (error) {
@@ -197,13 +200,16 @@ export const ChatInterface: React.FC = () => {
               </div>
               <div className="line-height-sans-4">
                 {m.role === 'assistant'
-                  ? <ReactMarkdown components={markdownComponents}>{m.content}</ReactMarkdown>
+                  ? <ReactMarkdown components={markdownComponents}>{m.content.replace(/\[(\d+)\]/g, (_, n) => {
+                      const url = m.citations?.[n];
+                      return url ? `[[${n}]](${url})` : `[${n}]`;
+                    })}</ReactMarkdown>
                   : m.content}
               </div>
               {m.sources && m.sources.length > 0 && (
                 <div className="margin-top-2 border-top padding-top-1 font-sans-3xs text-base-dark">
                   <div className="text-bold">Sources:</div>
-                  <ul className="margin-0 padding-left-2">
+                  <ol className="margin-0 padding-left-2">
                     {m.sources.map((s, si) => (
                       <li key={si}>
                         <a href={s.url} target="_blank" rel="noopener noreferrer" className="text-primary hover:text-primary-dark">
@@ -211,7 +217,7 @@ export const ChatInterface: React.FC = () => {
                         </a>
                       </li>
                     ))}
-                  </ul>
+                  </ol>
                 </div>
               )}
             </div>

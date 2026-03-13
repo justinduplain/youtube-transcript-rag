@@ -1,4 +1,5 @@
 import { useRef } from 'react';
+import type { MouseEvent as ReactMouseEvent } from 'react';
 import { Routes, Route, Link } from 'react-router-dom';
 import {
   Icon,
@@ -15,6 +16,13 @@ import { PlayButtonRobotIcon } from './components/icons/PlayButtonRobotIcon';
 
 function App() {
   const aboutModalRef = useRef<ModalRef>(null);
+  const openAboutModal = (event: ReactMouseEvent<HTMLButtonElement>) => {
+    event.preventDefault();
+    event.currentTarget.blur();
+    window.requestAnimationFrame(() => {
+      aboutModalRef.current?.toggleModal(undefined, true);
+    });
+  };
 
   return (
     <div className="min-h-screen bg-uswds-color-gray-5">
@@ -40,15 +48,15 @@ function App() {
               </div>
             </div>
             <nav style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginLeft: 'auto' }}>
-              <ModalToggleButton
-                modalRef={aboutModalRef}
-                opener
-                unstyled
+              <button
+                type="button"
+                className="usa-button usa-button--unstyled"
                 aria-label="About this project"
+                onClick={openAboutModal}
                 style={{ color: 'inherit', display: 'flex', cursor: 'pointer' }}
               >
                 <Icon.InfoOutline size={3} role="presentation" />
-              </ModalToggleButton>
+              </button>
               <a
                 href="https://github.com/justinduplain/youtube-transcript-rag"
                 target="_blank"
@@ -85,12 +93,13 @@ function App() {
         ref={aboutModalRef}
         id="about-modal"
         aria-labelledby="about-modal-heading"
+        aria-describedby="about-modal-description"
         isLarge
       >
         <ModalHeading id="about-modal-heading">About YouTube RAG Pipeline</ModalHeading>
 
         <div className="usa-prose">
-          <p>
+          <p id="about-modal-description">
             Paste a YouTube video or playlist URL, and this app will pull the transcript, index it,
             and let you ask questions about it. Every answer includes clickable timestamps that jump
             to the exact moment in the video, so you can verify anything the AI tells you.

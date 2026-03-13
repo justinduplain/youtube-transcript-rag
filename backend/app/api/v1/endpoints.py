@@ -52,6 +52,15 @@ def parse_structured_response(raw_text: str) -> tuple:
 
     return clean_answer, declared_ids
 
+def remap_citations(text: str, label_to_number: dict) -> str:
+    """Replace [Source A] -> [1], remove citations for filtered-out sources."""
+    def replacer(match):
+        label = match.group(1)
+        if label in label_to_number:
+            return f"[{label_to_number[label]}]"
+        return ""
+    return re.sub(r'\[Source ([A-Z])\]', replacer, text)
+
 # Initialize services
 yt_service = YtDlpService()
 transcript_service = TranscriptService()
@@ -221,23 +230,24 @@ def chat(request: ChatRequest):
             for m in request.history
             if m.content and m.content.strip()
         ]
-        
-        chat_engine = retrieval_service.get_chat_engine()
-        response = chat_engine.chat(request.message, chat_history=chat_history)
-        
-        clean_answer, declared_video_ids = parse_structured_response(str(response))
+
+        raw_response, label_to_node = retrieval_service.query_with_citations(
+            request.message, chat_history
+        )
+
+        clean_answer, declared_video_ids = parse_structured_response(raw_response)
         declared_set = set(declared_video_ids)
 
-        # Build sources: filter by declared video_ids when available, otherwise show all retrieved nodes
+        # Build sources from labeled nodes, tracking each source's label
         raw_sources = []
-        for node in response.source_nodes:
-            metadata = node.node.metadata
+        for label, node_with_score in label_to_node.items():
+            metadata = node_with_score.node.metadata
             vid = metadata.get("video_id")
 
             if declared_set and vid not in declared_set:
                 continue
 
-            content = node.node.get_content()
+            content = node_with_score.node.get_content()
             timestamp_match = re.search(r'\[(\d+)\]', content)
             timestamp_sec = int(timestamp_match.group(1)) if timestamp_match else 0
             minutes = timestamp_sec // 60
@@ -248,11 +258,12 @@ def chat(request: ChatRequest):
             deep_link = f"{base_url}&t={timestamp_sec}" if base_url else ""
 
             raw_sources.append({
+                "_label": label,
                 "text": content,
                 "video_id": vid,
                 "title": f"{timestamp_label} {metadata.get('title')}",
                 "url": deep_link,
-                "score": node.score or 0
+                "score": node_with_score.score or 0
             })
 
         # Sort by score descending
@@ -276,9 +287,31 @@ def chat(request: ChatRequest):
             if len(sources) == 5:
                 break
 
+        # Find which labels the LLM actually cited in the answer
+        cited_labels = set(re.findall(r'\[Source ([A-Z])\]', clean_answer))
+
+        # Keep only sources that were actually cited inline
+        sources = [s for s in sources if s["_label"] in cited_labels]
+
+        # Remap [Source A] -> [1], [Source B] -> [2], etc.
+        label_to_number = {}
+        for i, src in enumerate(sources):
+            label_to_number[src["_label"]] = str(i + 1)
+        clean_answer = remap_citations(clean_answer, label_to_number)
+
+        # Build citation number -> URL map for inline links
+        citations = {}
+        for i, src in enumerate(sources):
+            citations[str(i + 1)] = src.get("url", "")
+
+        # Strip internal _label key before returning
+        for s in sources:
+            s.pop("_label", None)
+
         return {
             "answer": clean_answer,
-            "sources": sources
+            "sources": sources,
+            "citations": citations
         }
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Query failed: {str(e)}")
